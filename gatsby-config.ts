@@ -2,9 +2,10 @@ import type { GatsbyConfig } from "gatsby";
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    title: ``,
-    siteUrl: `https://www.yourdomain.tld`,
+    title: `Hudak Codes`,
+    siteUrl: `https://hudak.codes/`,
   },
+  // pathPrefix: "/",
   plugins: [
     "gatsby-plugin-vanilla-extract",
     // {
