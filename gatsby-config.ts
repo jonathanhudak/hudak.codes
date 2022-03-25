@@ -5,7 +5,7 @@ const config: GatsbyConfig = {
     title: `Hudak Codes`,
     siteUrl: `https://hudak.codes/`,
   },
-  // pathPrefix: "/",
+  pathPrefix: "/",
   plugins: [
     "gatsby-plugin-vanilla-extract",
     // {
@@ -41,6 +41,14 @@ const config: GatsbyConfig = {
         path: "./src/pages/",
       },
       __key: "pages",
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "posts",
+        path: "./src/posts/",
+      },
+      __key: "posts",
     },
   ],
 };

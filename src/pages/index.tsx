@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Link } from "gatsby";
+import { Link, graphql } from "gatsby";
+import { MDXRenderer } from "gatsby-plugin-mdx";
 
 // styles
 const pageStyles = {
@@ -135,15 +136,38 @@ const links = [
   },
 ];
 
-// markup
-const IndexPage = () => {
+export const query = graphql`
+  query HomePageQuery {
+    allMdx {
+      nodes {
+        frontmatter {
+          title
+          date
+        }
+        id
+        body
+      }
+    }
+  }
+`;
+
+const IndexPage = ({ data }) => {
+  const { nodes: posts } = data?.allMdx;
   return (
     <div style={pageStyles}>
       <nav style={navStyles}>
+        {console.log(data)}
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
       </nav>
-      <main>TBD</main>
+      <main>
+        {posts.map((post) => (
+          <section key={post.id}>
+            <h2>{post.frontmatter.title}</h2>
+            <MDXRenderer>{post.body}</MDXRenderer>
+          </section>
+        ))}
+      </main>
       <footer>
         <details>
           <summary>Gatsby reference</summary>
