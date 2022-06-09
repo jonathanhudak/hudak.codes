@@ -10,7 +10,9 @@ h1, h2, h3, h4, h5, p {
 
 header, main, footer {
     margin: auto;
+    max-width: 100vw;
 }
+
 
 .u-flow > * + * {
   margin-bottom: var(--size-3);
@@ -35,11 +37,27 @@ main {
     justify-items: stretch;
 }
 
+.mdx-embed, .code-embed {
+    max-width: calc(100vw - var(--size-2));
+    overflow: hidden;
+}
+
+.code-embed .code-block {
+    overflow: auto;
+}
+
+ul {
+    padding-inline-start: var(--size-2);
+}
+
 .nav {
     display: grid;
     grid-gap: var(--size-2);
     grid-auto-columns: min-content;
     grid-auto-flow: column;
+    justify-content: center;
+    padding-bottom: var(--size-2);
+
 }
 
 a[aria-current="page"] {
@@ -49,6 +67,7 @@ a[aria-current="page"] {
 .PostsIndex {
     display: grid;
     grid-gap: var(--size-4);
+    padding: var(--size-2);
 }
 
 h2 > a {

@@ -8,19 +8,21 @@ import theme from "prism-react-renderer/themes/vsDark";
 
 function Code({ code, lang }) {
   return (
-    <Highlight {...defaultProps} code={code} theme={theme} language={lang}>
-      {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre className={`${className} code-block`} style={style}>
-          {tokens.map((line, i) => (
-            <div {...getLineProps({ line, key: i })}>
-              {line.map((token, key) => (
-                <span {...getTokenProps({ token, key })} />
-              ))}
-            </div>
-          ))}
-        </pre>
-      )}
-    </Highlight>
+    <div className="code-embed">
+      <Highlight {...defaultProps} code={code} theme={theme} language={lang}>
+        {({ className, style, tokens, getLineProps, getTokenProps }) => (
+          <pre className={`${className} code-block`} style={style}>
+            {tokens.map((line, i) => (
+              <div {...getLineProps({ line, key: i })}>
+                {line.map((token, key) => (
+                  <span {...getTokenProps({ token, key })} />
+                ))}
+              </div>
+            ))}
+          </pre>
+        )}
+      </Highlight>
+    </div>
   );
 }
 
