@@ -1,4 +1,9 @@
 import type { GatsbyConfig } from "gatsby";
+import path from "path";
+
+require("dotenv").config({
+  path: `.env`,
+});
 
 const config: GatsbyConfig = {
   siteMetadata: {
@@ -23,7 +28,14 @@ const config: GatsbyConfig = {
         icon: "src/images/icon.png",
       },
     },
-    "gatsby-plugin-mdx",
+    {
+      resolve: "gatsby-plugin-mdx",
+      options: {
+        defaultLayouts: {
+          default: path.resolve("./src/components/Layout.tsx"),
+        },
+      },
+    },
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
     {
@@ -41,6 +53,14 @@ const config: GatsbyConfig = {
         path: "./src/pages/",
       },
       __key: "pages",
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "posts",
+        path: "./src/posts/",
+      },
+      __key: "posts",
     },
   ],
 };

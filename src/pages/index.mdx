@@ -1,0 +1,29 @@
+import PostIndex from "../components/PostIndex";
+import { graphql } from "gatsby";
+import { sortPostsDateDesc } from "../utils/sort";
+
+<PostIndex
+  posts={props.data.allMdx.nodes
+    .filter(
+      (n) => n.fileAbsolutePath.includes("/posts/") && n.frontmatter.published
+    )
+    .sort(sortPostsDateDesc)}
+/>
+
+export const pageQuery = graphql`
+  query {
+    allMdx {
+      nodes {
+        id
+        fileAbsolutePath
+        slug
+        excerpt(pruneLength: 200, truncate: true)
+        frontmatter {
+          date
+          title
+          published
+        }
+      }
+    }
+  }
+`;
