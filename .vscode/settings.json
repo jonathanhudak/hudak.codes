@@ -9,5 +9,7 @@
     // you can also add support for autocomplete in other file extensions
     "cssvar.extensions": [
       "css", "html", "jsx", "tsx"
-    ]
+    ],
+    "deno.enable": true,
+    "deno.unstable": true
   }

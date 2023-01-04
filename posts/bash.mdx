@@ -1,0 +1,269 @@
+---
+title: Bash Scripts
+date: 2022-10-02
+---
+
+I have recently rekindled a love with bash scripts to automate repetitive tasks.
+They may look a bit ugly but you can hack together something useful quite easily.
+
+One thing I have found to be a pain recently is setting up linting, prettier, and commitizen in npm (NodeJS) packages. So as an exercise I took a stab at automating the whole process as outlined in this unaffiliated blog post https://jamesandrewwright.com/articles/commitizen-eslint-prettier-husky
+
+Here is the script:
+https://gist.github.com/jonathanhudak/96600bce4540cb7bf29a4b9211bebbc5
+
+```
+step() {
+    read -p "$1? " -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        echo "[Running]: $2"
+        eval "$2"
+    fi
+}
+
+stepWithFn() {
+    read -p "$1? " -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        ($2)
+    fi
+}
+
+stepWithInput() {
+    read -p "$1? " -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        read -p "$2 " -r
+        echo    # (optional) move to a new line
+        ($3 $REPLY)
+    fi
+}
+
+manualStep() {
+    echo -e "$@"
+    read -p "Are you done? " -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        echo
+    fi
+}
+
+# --- BEGIN
+
+step \
+    "Initialize git repo" \
+    "git init" \
+
+# setup typescript
+
+step \
+    "Setup typescript" \
+    "npm install typescript --save-dev && npx tsc --init" \
+
+# ---
+
+# Prettier and ESLint
+
+step \
+    "Install Prettier and ESLint node modules from npm" \
+    "npm install eslint prettier eslint-config-prettier  --save-dev"
+
+step \
+    "Create ESLint configuration file" \
+    "npm init @eslint/config"
+
+step \
+    "Create ESLint ignore file" \
+    "echo .eslintrc.js >> .eslintignore"
+
+step \
+    "Create .prettierrc" \
+    "echo -e '{\n\t\"tabWidth\": 4\n}' >> .prettierrc"
+
+step \
+    "Create .prettierignore" \
+    "echo -e '# Ignore artifacts:\npackage-lock.json\nbuild\ncoverage' >> .prettierignore"
+
+manualStep \
+    "Add \"prettier\" to eslint config \"extends\"\n" \
+    '\nExample:\n\t"extends": ["eslint:recommended", "prettier"],\n'
+
+checkRules() {
+    eval "npx eslint-config-prettier $1" ;
+}
+
+stepWithInput \
+    "Run npx eslint-config-prettier" \
+    "Provide a path to your files:" \
+    checkRules
+
+# Testing ESLint and Prettier
+
+testESLintPrettier() {
+    p=${1:-"."}
+    eval "npx eslint . $p"
+    eval "npx prettier --check . $p"
+    eval "npx prettier --write . $p"
+}
+
+stepWithInput \
+    "Test eslint and prettier" \
+    "Provide a path - [Press Enter] for default (.):" \
+    testESLintPrettier
+
+
+
+# Adding helper scripts to package.json
+# https://docs.npmjs.com/cli/v7/commands/npm-pkg
+
+step \
+    'Add "prettier:check" script to package.json' \
+    "npm pkg set 'scripts.prettier:check'='npx prettier --check .'"
+
+step \
+    'Add "prettier:fix" script to package.json' \
+    "npm pkg set 'scripts.prettier:fix'='npx prettier --write .'"
+
+step \
+    'Add "lint" script to package.json' \
+    "npm pkg set 'scripts.lint'='npx eslint .'"
+
+# ---
+
+# Add extensions to VSCode (optional)
+
+addExtensions() {
+    mkdir -p .vscode
+    cat >.vscode/extensions.json <<EOL
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ]
+}
+EOL
+}
+stepWithFn \
+    "Add recommended .vscode/extensions.json" \
+    addExtensions
+
+#TODO
+# husky
+
+step \
+    "Setup and install Husky to configure git hooks" \
+    "npx husky-init && npm install  --save-dev"
+
+# lint-staged
+step \
+    "Setup and install \"lint-staged\" to limit linting to staged files" \
+    "npm install lint-staged --save-dev"
+
+addLintStagedConfig() {
+    npm pkg set 'lint-staged[*.{css,html,json,jsx,js,ts,tsx}][0]=prettier --write'
+    npm pkg set 'lint-staged[*.{js,jsx,ts,tsx}][0]=eslint --fix'
+}
+
+stepWithFn \
+    'Add "lint-staged" config to package.json' \
+    addLintStagedConfig
+
+updateHuskyPreCommit() {
+    cat << EOF > "$PWD/.husky/pre-commit"
+#!/bin/sh
+. "\$(dirname "\$0")/_/husky.sh"
+npx lint-staged
+EOF
+}
+
+stepWithFn \
+    "Update .husky/pre-commit"
+    updateHuskyPreCommit
+
+#  Commitizen and friends
+
+
+installCommitizen() {
+    npm install commitizen cz-conventional-changelog @commitlint/cli @commitlint/config-conventional --save-dev
+    npm pkg set 'scripts.commitizen:init'='commitizen init cz-conventional-changelog --save-dev --save-exact'
+    npm run commitizen:init
+}
+
+stepWithFn \
+    "Install Commitizen, cz-conventional-changelog lint-staged and @commitlint"
+    installCommitizen
+
+addCommitLintConfig() {
+    cat << EOF > "$PWD/commitlint.config.js"
+module.exports = { extends: ["@commitlint/config-conventional"] };
+EOF
+}
+
+stepWithFn \
+    "Create commitlint.config.js" \
+   addCommitLintConfig
+
+# .husky/prepare-commit-msg
+
+updateHuskyPrepareCommitMessage() {
+    cat << EOF > "$PWD/.husky/prepare-commit-msg"
+#!/bin/sh
+. "\$(dirname "\$0")/_/husky.sh"
+exec < /dev/tty && node_modules/.bin/cz --hook || true
+EOF
+}
+
+stepWithFn \
+    "Update .husky/prepare-commit-msg"
+    updateHuskyPrepareCommitMessage
+
+
+# .husky/commit-msg
+
+updateHuskyCommitMessage() {
+    cat << EOF > "$PWD/.husky/commit-msg"
+#!/bin/sh
+. "\$(dirname "\$0")/_/husky.sh"
+npx commitlint --edit $1
+EOF
+}
+
+stepWithFn \
+    "Update .husky/commit-msg"
+    updateHuskyCommitMessage
+
+makeHuskyExec() {
+    chmod +x "$PWD/./husky/*"
+}
+
+makeHuskyExec() {
+    chmod +x "$PWD/.husky/commit-msg"
+    chmod +x "$PWD/.husky/pre-commit"
+    chmod +x "$PWD/.husky/prepare-commit-msg"
+}
+
+stepWithFn \
+    "Make .husky scripts executable" \
+    makeHuskyExec
+
+
+echo -e "\n\nAll done! Test with:\n\tgit add .\n\tgit commit -m \"I am a cowboy\"\n\n"
+```
+
+## Run gist from [Zsh](https://ohmyz.sh/)
+
+I also created an function for my local Zsh config file that allows me to easily run bash script from a github gist.
+
+⛔️ Note this should be used with caution ⛔️
+
+https://gist.github.com/jonathanhudak/5b9ff8a3e988204be74b80a6004a5e85
+
+## Setup a Node package with all the bells and whistles of modern frontend development
+
+Check it out below. If you trust it you can add the function above and then start it up like so:
+
+https://gist.github.com/jonathanhudak/96600bce4540cb7bf29a4b9211bebbc5

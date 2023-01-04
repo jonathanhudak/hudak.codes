@@ -1,0 +1,28 @@
+---
+title: Useful Git Tips
+date: 2023-01-01
+published: true
+templateEngine: mdx
+---
+
+A collection of useful git commands to simplify life:
+
+## AutoSetupRemote
+
+```
+git config --global push.autoSetupRemote true
+```
+
+No need to use `--set-upstream` again.
+
+- https://twitter.com/santoshyadavdev/status/1558086948484530177?s=12&t=VZONIgxyDgEHGorcFSCdmQ
+- https://git-scm.com/docs/git-config#Documentation/git-config.txt-pushautoSetupRemote
+
+## Output File Git History
+
+```
+git log --full-history -- src/path/to/file.js # list logs
+git log -p -- src/path/to/file.js # diff
+```
+
+- https://twitter.com/JoshWComeau/status/1609320979213287424

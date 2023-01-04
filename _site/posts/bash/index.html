@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hudak.codes | Bash Scripts</title>
+  <link rel="stylesheet" href="https://the.missing.style/v1.0.5/missing.min.css">
+</head>
+<body>
+  <main>
+    <article>
+      <header>
+        <a href="/">hudak.codes</a>
+      </header>
+
+      <p>I have recently rekindled a love with bash scripts to automate repetitive tasks.
+They may look a bit ugly but you can hack together something useful quite easily.</p>
+<p>One thing I have found to be a pain recently is setting up linting, prettier, and commitizen in npm (NodeJS) packages. So as an exercise I took a stab at automating the whole process as outlined in this unaffiliated blog post <a href="https://jamesandrewwright.com/articles/commitizen-eslint-prettier-husky">https://jamesandrewwright.com/articles/commitizen-eslint-prettier-husky</a></p>
+<p>Here is the script:
+<a href="https://gist.github.com/jonathanhudak/96600bce4540cb7bf29a4b9211bebbc5">https://gist.github.com/jonathanhudak/96600bce4540cb7bf29a4b9211bebbc5</a></p>
+<pre><code>step() {
+    read -p &quot;$1? &quot; -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        echo &quot;[Running]: $2&quot;
+        eval &quot;$2&quot;
+    fi
+}
+
+stepWithFn() {
+    read -p &quot;$1? &quot; -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        ($2)
+    fi
+}
+
+stepWithInput() {
+    read -p &quot;$1? &quot; -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        read -p &quot;$2 &quot; -r
+        echo    # (optional) move to a new line
+        ($3 $REPLY)
+    fi
+}
+
+manualStep() {
+    echo -e &quot;$@&quot;
+    read -p &quot;Are you done? &quot; -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        echo
+    fi
+}
+
+# --- BEGIN
+
+step \
+    &quot;Initialize git repo&quot; \
+    &quot;git init&quot; \
+
+# setup typescript
+
+step \
+    &quot;Setup typescript&quot; \
+    &quot;npm install typescript --save-dev &amp;&amp; npx tsc --init&quot; \
+
+# ---
+
+# Prettier and ESLint
+
+step \
+    &quot;Install Prettier and ESLint node modules from npm&quot; \
+    &quot;npm install eslint prettier eslint-config-prettier  --save-dev&quot;
+
+step \
+    &quot;Create ESLint configuration file&quot; \
+    &quot;npm init @eslint/config&quot;
+
+step \
+    &quot;Create ESLint ignore file&quot; \
+    &quot;echo .eslintrc.js >> .eslintignore&quot;
+
+step \
+    &quot;Create .prettierrc&quot; \
+    &quot;echo -e '{\n\t\&quot;tabWidth\&quot;: 4\n}' >> .prettierrc&quot;
+
+step \
+    &quot;Create .prettierignore&quot; \
+    &quot;echo -e '# Ignore artifacts:\npackage-lock.json\nbuild\ncoverage' >> .prettierignore&quot;
+
+manualStep \
+    &quot;Add \&quot;prettier\&quot; to eslint config \&quot;extends\&quot;\n&quot; \
+    '\nExample:\n\t&quot;extends&quot;: [&quot;eslint:recommended&quot;, &quot;prettier&quot;],\n'
+
+checkRules() {
+    eval &quot;npx eslint-config-prettier $1&quot; ;
+}
+
+stepWithInput \
+    &quot;Run npx eslint-config-prettier&quot; \
+    &quot;Provide a path to your files:&quot; \
+    checkRules
+
+# Testing ESLint and Prettier
+
+testESLintPrettier() {
+    p=${1:-&quot;.&quot;}
+    eval &quot;npx eslint . $p&quot;
+    eval &quot;npx prettier --check . $p&quot;
+    eval &quot;npx prettier --write . $p&quot;
+}
+
+stepWithInput \
+    &quot;Test eslint and prettier&quot; \
+    &quot;Provide a path - [Press Enter] for default (.):&quot; \
+    testESLintPrettier
+
+
+
+# Adding helper scripts to package.json
+# https://docs.npmjs.com/cli/v7/commands/npm-pkg
+
+step \
+    'Add &quot;prettier:check&quot; script to package.json' \
+    &quot;npm pkg set 'scripts.prettier:check'='npx prettier --check .'&quot;
+
+step \
+    'Add &quot;prettier:fix&quot; script to package.json' \
+    &quot;npm pkg set 'scripts.prettier:fix'='npx prettier --write .'&quot;
+
+step \
+    'Add &quot;lint&quot; script to package.json' \
+    &quot;npm pkg set 'scripts.lint'='npx eslint .'&quot;
+
+# ---
+
+# Add extensions to VSCode (optional)
+
+addExtensions() {
+    mkdir -p .vscode
+    cat >.vscode/extensions.json &lt;&lt;EOL
+{
+  &quot;recommendations&quot;: [
+    &quot;dbaeumer.vscode-eslint&quot;,
+    &quot;esbenp.prettier-vscode&quot;
+  ]
+}
+EOL
+}
+stepWithFn \
+    &quot;Add recommended .vscode/extensions.json&quot; \
+    addExtensions
+
+#TODO
+# husky
+
+step \
+    &quot;Setup and install Husky to configure git hooks&quot; \
+    &quot;npx husky-init &amp;&amp; npm install  --save-dev&quot;
+
+# lint-staged
+step \
+    &quot;Setup and install \&quot;lint-staged\&quot; to limit linting to staged files&quot; \
+    &quot;npm install lint-staged --save-dev&quot;
+
+addLintStagedConfig() {
+    npm pkg set 'lint-staged[*.{css,html,json,jsx,js,ts,tsx}][0]=prettier --write'
+    npm pkg set 'lint-staged[*.{js,jsx,ts,tsx}][0]=eslint --fix'
+}
+
+stepWithFn \
+    'Add &quot;lint-staged&quot; config to package.json' \
+    addLintStagedConfig
+
+updateHuskyPreCommit() {
+    cat &lt;&lt; EOF > &quot;$PWD/.husky/pre-commit&quot;
+#!/bin/sh
+. &quot;\$(dirname &quot;\$0&quot;)/_/husky.sh&quot;
+npx lint-staged
+EOF
+}
+
+stepWithFn \
+    &quot;Update .husky/pre-commit&quot;
+    updateHuskyPreCommit
+
+#  Commitizen and friends
+
+
+installCommitizen() {
+    npm install commitizen cz-conventional-changelog @commitlint/cli @commitlint/config-conventional --save-dev
+    npm pkg set 'scripts.commitizen:init'='commitizen init cz-conventional-changelog --save-dev --save-exact'
+    npm run commitizen:init
+}
+
+stepWithFn \
+    &quot;Install Commitizen, cz-conventional-changelog lint-staged and @commitlint&quot;
+    installCommitizen
+
+addCommitLintConfig() {
+    cat &lt;&lt; EOF > &quot;$PWD/commitlint.config.js&quot;
+module.exports = { extends: [&quot;@commitlint/config-conventional&quot;] };
+EOF
+}
+
+stepWithFn \
+    &quot;Create commitlint.config.js&quot; \
+   addCommitLintConfig
+
+# .husky/prepare-commit-msg
+
+updateHuskyPrepareCommitMessage() {
+    cat &lt;&lt; EOF > &quot;$PWD/.husky/prepare-commit-msg&quot;
+#!/bin/sh
+. &quot;\$(dirname &quot;\$0&quot;)/_/husky.sh&quot;
+exec &lt; /dev/tty &amp;&amp; node_modules/.bin/cz --hook || true
+EOF
+}
+
+stepWithFn \
+    &quot;Update .husky/prepare-commit-msg&quot;
+    updateHuskyPrepareCommitMessage
+
+
+# .husky/commit-msg
+
+updateHuskyCommitMessage() {
+    cat &lt;&lt; EOF > &quot;$PWD/.husky/commit-msg&quot;
+#!/bin/sh
+. &quot;\$(dirname &quot;\$0&quot;)/_/husky.sh&quot;
+npx commitlint --edit $1
+EOF
+}
+
+stepWithFn \
+    &quot;Update .husky/commit-msg&quot;
+    updateHuskyCommitMessage
+
+makeHuskyExec() {
+    chmod +x &quot;$PWD/./husky/*&quot;
+}
+
+makeHuskyExec() {
+    chmod +x &quot;$PWD/.husky/commit-msg&quot;
+    chmod +x &quot;$PWD/.husky/pre-commit&quot;
+    chmod +x &quot;$PWD/.husky/prepare-commit-msg&quot;
+}
+
+stepWithFn \
+    &quot;Make .husky scripts executable&quot; \
+    makeHuskyExec
+
+
+echo -e &quot;\n\nAll done! Test with:\n\tgit add .\n\tgit commit -m \&quot;I am a cowboy\&quot;\n\n&quot;
+</code></pre>
+<h2>Run gist from <a href="https://ohmyz.sh/">Zsh</a></h2>
+<p>I also created an function for my local Zsh config file that allows me to easily run bash script from a github gist.</p>
+<p>⛔️ Note this should be used with caution ⛔️</p>
+<p><a href="https://gist.github.com/jonathanhudak/5b9ff8a3e988204be74b80a6004a5e85">https://gist.github.com/jonathanhudak/5b9ff8a3e988204be74b80a6004a5e85</a></p>
+<h2>Setup a Node package with all the bells and whistles of modern frontend development</h2>
+<p>Check it out below. If you trust it you can add the function above and then start it up like so:</p>
+<p><a href="https://gist.github.com/jonathanhudak/96600bce4540cb7bf29a4b9211bebbc5">https://gist.github.com/jonathanhudak/96600bce4540cb7bf29a4b9211bebbc5</a></p>
+    </article>
+  </main>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hudak.codes | html_page Deno module</title>
+  <link rel="stylesheet" href="https://the.missing.style/v1.0.5/missing.min.css">
+</head>
+<body>
+  <main>
+    <article>
+      <header>
+        <a href="/">hudak.codes</a>
+      </header>
+
+      <p>I have been learning about <a href="https://deno.land/">Deno</a> lately and often in prototypes I want to serve a simple HTML page so I created this simple module which simplifies creating a basic HTMl page.</p>
+<p>In the process I learned about how to <a href="https://deno.land/add_module">setup a Deno Third Party Module</a> and how to get it deployed to <a href="https://deno.land/x">https://deno.land/x</a></p>
+<pre><code class="language-ts">import { Application, Router } from &quot;https://deno.land/x/oak/mod.ts&quot;;
+import { makeHTMLPage } from &quot;https://deno.land/x/html_page/mod.ts&quot;;
+
+const router = new Router();
+
+router.get(&quot;/&quot;, async (context) => {
+  context.response.body = makeHTMLPage({
+    body: `&lt;h1>Hello Deno 🦕&lt;/h1>`,
+    title: &quot;html_page&quot;,
+  });
+});
+
+const app = new Application();
+app.use(router.routes());
+app.use(router.allowedMethods());
+
+await app.listen({ port: 8002 });
+</code></pre>
+<p>Deno playground: <a href="https://dash.deno.com/playground/careful-weasel-51">https://dash.deno.com/playground/careful-weasel-51</a></p>
+<p>Checkout the module here: <a href="https://deno.land/x/html_page">https://deno.land/x/html_page</a></p>
+<h3>Code repositories</h3>
+<ul>
+<li>Github: <a href="https://github.com/jonathanhudak/html_page">https://github.com/jonathanhudak/html_page</a></li>
+<li>Nest.land <a href="https://nest.land/package/html_page">https://nest.land/package/html_page</a></li>
+</ul>
+    </article>
+  </main>
+</body>
+</html>
