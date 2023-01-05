@@ -1,7 +1,7 @@
 import type { PageData } from "lume/core.ts";
 
 export default function ({ search }: PageData) {
-  const posts = search.pages("type=post");
+  const posts = search.pages("type=post published=true");
 
   return `
     <ul>
