@@ -20,9 +20,12 @@ jobs:
       - name: Build site
         run: |
           deno task build --location=https://hudak.codes
-      - name: Deploy
-        uses: crazy-max/ghaction-github-pages@v2.0.1
+      - name: DeployDeploy to GitHub Pages
+        if: success()
+        # https://github.com/marketplace/actions/github-pages
+        uses: crazy-max/ghaction-github-pages@v3
         with:
+          domain: hudak.codes
           build_dir: _site
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
