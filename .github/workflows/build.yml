@@ -25,7 +25,7 @@ jobs:
         # https://github.com/marketplace/actions/github-pages
         uses: crazy-max/ghaction-github-pages@v3
         with:
-          domain: hudak.codes
+          fqdn: hudak.codes
           build_dir: _site
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
