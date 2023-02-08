@@ -392,6 +392,7 @@
     "https://deno.land/x/lume@v1.14.2/deps/http.ts": "7425a72bd89156a6ffc4305057953ee5854dfc7143bb3432524e4b558a857d35",
     "https://deno.land/x/lume@v1.14.2/deps/imagick.ts": "752ad4f244516971daf57ca8bb7d8b6670f78311cbae5338f64f9b2ab324f3b4",
     "https://deno.land/x/lume@v1.14.2/deps/jsonc.ts": "d53a7aceb2aea14dd6772ea39cd4550cd6d631caccb31d81fc832606cd1b961b",
+    "https://deno.land/x/lume@v1.14.2/deps/lightningcss.ts": "e2e7d7373687629ba9ff6886db5f9363b7f862440c74474b924a6e34d6a49ea1",
     "https://deno.land/x/lume@v1.14.2/deps/markdown_it.ts": "e48e34de092bc3fc96617372f26190cf3bbf722f4206a9e9e64febbc8fb925c4",
     "https://deno.land/x/lume@v1.14.2/deps/mdx.ts": "338abdd0b16b23445a005ccec8233946ead94381ca6e45af9ddd2efc2ce52345",
     "https://deno.land/x/lume@v1.14.2/deps/nunjucks.ts": "a8f31de092612a613680944e10b3647ccf91a1db4e099f046c3e73a40f8a6193",
@@ -419,6 +420,7 @@
     "https://deno.land/x/lume@v1.14.2/plugins/json.ts": "60f3b8616c282a9c592e1974db143b3461999c55b20235eebced87482ebf16bd",
     "https://deno.land/x/lume@v1.14.2/plugins/jsx.ts": "529e290beb2e55c3de8392a5fec2789bf774e48e90e4d2959d8938cdf31b0328",
     "https://deno.land/x/lume@v1.14.2/plugins/jsx_preact.ts": "4fcfa42bf57e48f1a207558187f901652f9f0b417b4d9522e64ea4a9fbbaf2e0",
+    "https://deno.land/x/lume@v1.14.2/plugins/lightningcss.ts": "35314acf393bbd947bfd5a766769cf03b2a5e255437c45c68de641730d26054e",
     "https://deno.land/x/lume@v1.14.2/plugins/markdown.ts": "dfc6fdd0c2af96da5134567d0d57c3efc5cef3f18c48fa2eb858c7e5db03e12e",
     "https://deno.land/x/lume@v1.14.2/plugins/mdx.ts": "58cdeace94871d1da8359cd726cd2364c5909e25d4af3b342db9df8de110be5b",
     "https://deno.land/x/lume@v1.14.2/plugins/metas.ts": "4ceae65a6887f1fb4425df1b1ddc2db709c5f9d23717a0774a3a23ee4cc4784f",
@@ -484,6 +486,7 @@
       "@mdx-js/mdx@2.2.1": "@mdx-js/mdx@2.2.1",
       "autoprefixer@10.4.13": "autoprefixer@10.4.13_postcss@8.4.20",
       "highlight.js@11.7.0": "highlight.js@11.7.0",
+      "lightningcss-wasm@1.17.1": "lightningcss-wasm@1.17.1",
       "markdown-it-attrs@4.1.6": "markdown-it-attrs@4.1.6_markdown-it@13.0.1",
       "markdown-it-deflist@2.1.0": "markdown-it-deflist@2.1.0",
       "markdown-it@13.0.1": "markdown-it@13.0.1",
@@ -944,6 +947,10 @@
       },
       "kleur@4.1.5": {
         "integrity": "sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==",
+        "dependencies": {}
+      },
+      "lightningcss-wasm@1.17.1": {
+        "integrity": "sha512-srJqZu2Xlviq6wipA/cbgZuxXifqbJm5VL5FIH3jCSSiL1RdXdTOq96coILuCsq5h+rm00nzKP11gTHdV3O4Ig==",
         "dependencies": {}
       },
       "linkify-it@4.0.1": {

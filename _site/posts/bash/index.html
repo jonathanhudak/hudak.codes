@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>hudak.codes | Bash Scripts</title>
-  <link rel="stylesheet" href="https://the.missing.style/v1.0.5/missing.min.css">
+  <link rel="stylesheet" href="https://the.missing.style/v1.0.8/missing.css">
+  <link rel="stylesheet" href="https://the.missing.style/v1.0.8/missing-prism.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <main>
@@ -19,246 +20,246 @@ They may look a bit ugly but you can hack together something useful quite easily
 <p>One thing I have found to be a pain recently is setting up linting, prettier, and commitizen in npm (NodeJS) packages. So as an exercise I took a stab at automating the whole process as outlined in this unaffiliated blog post <a href="https://jamesandrewwright.com/articles/commitizen-eslint-prettier-husky">https://jamesandrewwright.com/articles/commitizen-eslint-prettier-husky</a></p>
 <p>Here is the script:
 <a href="https://gist.github.com/jonathanhudak/96600bce4540cb7bf29a4b9211bebbc5">https://gist.github.com/jonathanhudak/96600bce4540cb7bf29a4b9211bebbc5</a></p>
-<pre><code>step() {
-    read -p &quot;$1? &quot; -r
-    echo    # (optional) move to a new line
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        echo &quot;[Running]: $2&quot;
-        eval &quot;$2&quot;
-    fi
-}
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token function-name function">step</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"<span class="token variable">$1</span>? "</span> <span class="token parameter variable">-r</span>
+    <span class="token builtin class-name">echo</span>    <span class="token comment"># (optional) move to a new line</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token environment constant">$REPLY</span> <span class="token operator">=~</span> ^<span class="token punctuation">[</span>Yy<span class="token punctuation">]</span>$ <span class="token punctuation">]</span><span class="token punctuation">]</span>
+    <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"[Running]: <span class="token variable">$2</span>"</span>
+        <span class="token builtin class-name">eval</span> <span class="token string">"<span class="token variable">$2</span>"</span>
+    <span class="token keyword">fi</span>
+<span class="token punctuation">}</span>
 
-stepWithFn() {
-    read -p &quot;$1? &quot; -r
-    echo    # (optional) move to a new line
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        ($2)
-    fi
-}
+<span class="token function-name function">stepWithFn</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"<span class="token variable">$1</span>? "</span> <span class="token parameter variable">-r</span>
+    <span class="token builtin class-name">echo</span>    <span class="token comment"># (optional) move to a new line</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token environment constant">$REPLY</span> <span class="token operator">=~</span> ^<span class="token punctuation">[</span>Yy<span class="token punctuation">]</span>$ <span class="token punctuation">]</span><span class="token punctuation">]</span>
+    <span class="token keyword">then</span>
+        <span class="token punctuation">(</span><span class="token variable">$2</span><span class="token punctuation">)</span>
+    <span class="token keyword">fi</span>
+<span class="token punctuation">}</span>
 
-stepWithInput() {
-    read -p &quot;$1? &quot; -r
-    echo    # (optional) move to a new line
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        read -p &quot;$2 &quot; -r
-        echo    # (optional) move to a new line
-        ($3 $REPLY)
-    fi
-}
+<span class="token function-name function">stepWithInput</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"<span class="token variable">$1</span>? "</span> <span class="token parameter variable">-r</span>
+    <span class="token builtin class-name">echo</span>    <span class="token comment"># (optional) move to a new line</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token environment constant">$REPLY</span> <span class="token operator">=~</span> ^<span class="token punctuation">[</span>Yy<span class="token punctuation">]</span>$ <span class="token punctuation">]</span><span class="token punctuation">]</span>
+    <span class="token keyword">then</span>
+        <span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"<span class="token variable">$2</span> "</span> <span class="token parameter variable">-r</span>
+        <span class="token builtin class-name">echo</span>    <span class="token comment"># (optional) move to a new line</span>
+        <span class="token punctuation">(</span><span class="token variable">$3</span> <span class="token environment constant">$REPLY</span><span class="token punctuation">)</span>
+    <span class="token keyword">fi</span>
+<span class="token punctuation">}</span>
 
-manualStep() {
-    echo -e &quot;$@&quot;
-    read -p &quot;Are you done? &quot; -r
-    echo    # (optional) move to a new line
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        echo
-    fi
-}
+<span class="token function-name function">manualStep</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token builtin class-name">echo</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token variable">$@</span>"</span>
+    <span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"Are you done? "</span> <span class="token parameter variable">-r</span>
+    <span class="token builtin class-name">echo</span>    <span class="token comment"># (optional) move to a new line</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token environment constant">$REPLY</span> <span class="token operator">=~</span> ^<span class="token punctuation">[</span>Yy<span class="token punctuation">]</span>$ <span class="token punctuation">]</span><span class="token punctuation">]</span>
+    <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span>
+    <span class="token keyword">fi</span>
+<span class="token punctuation">}</span>
 
-# --- BEGIN
+<span class="token comment"># --- BEGIN</span>
 
-step \
-    &quot;Initialize git repo&quot; \
-    &quot;git init&quot; \
+step <span class="token punctuation">\</span>
+    <span class="token string">"Initialize git repo"</span> <span class="token punctuation">\</span>
+    <span class="token string">"git init"</span> <span class="token punctuation">\</span>
 
-# setup typescript
+<span class="token comment"># setup typescript</span>
 
-step \
-    &quot;Setup typescript&quot; \
-    &quot;npm install typescript --save-dev &amp;&amp; npx tsc --init&quot; \
+step <span class="token punctuation">\</span>
+    <span class="token string">"Setup typescript"</span> <span class="token punctuation">\</span>
+    <span class="token string">"npm install typescript --save-dev &amp;&amp; npx tsc --init"</span> <span class="token punctuation">\</span>
 
-# ---
+<span class="token comment"># ---</span>
 
-# Prettier and ESLint
+<span class="token comment"># Prettier and ESLint</span>
 
-step \
-    &quot;Install Prettier and ESLint node modules from npm&quot; \
-    &quot;npm install eslint prettier eslint-config-prettier  --save-dev&quot;
+step <span class="token punctuation">\</span>
+    <span class="token string">"Install Prettier and ESLint node modules from npm"</span> <span class="token punctuation">\</span>
+    <span class="token string">"npm install eslint prettier eslint-config-prettier  --save-dev"</span>
 
-step \
-    &quot;Create ESLint configuration file&quot; \
-    &quot;npm init @eslint/config&quot;
+step <span class="token punctuation">\</span>
+    <span class="token string">"Create ESLint configuration file"</span> <span class="token punctuation">\</span>
+    <span class="token string">"npm init @eslint/config"</span>
 
-step \
-    &quot;Create ESLint ignore file&quot; \
-    &quot;echo .eslintrc.js >> .eslintignore&quot;
+step <span class="token punctuation">\</span>
+    <span class="token string">"Create ESLint ignore file"</span> <span class="token punctuation">\</span>
+    <span class="token string">"echo .eslintrc.js &gt;&gt; .eslintignore"</span>
 
-step \
-    &quot;Create .prettierrc&quot; \
-    &quot;echo -e '{\n\t\&quot;tabWidth\&quot;: 4\n}' >> .prettierrc&quot;
+step <span class="token punctuation">\</span>
+    <span class="token string">"Create .prettierrc"</span> <span class="token punctuation">\</span>
+    <span class="token string">"echo -e '{<span class="token entity" title="\n">\n</span><span class="token entity" title="\t">\t</span><span class="token entity" title="\&quot;">\"</span>tabWidth<span class="token entity" title="\&quot;">\"</span>: 4<span class="token entity" title="\n">\n</span>}' &gt;&gt; .prettierrc"</span>
 
-step \
-    &quot;Create .prettierignore&quot; \
-    &quot;echo -e '# Ignore artifacts:\npackage-lock.json\nbuild\ncoverage' >> .prettierignore&quot;
+step <span class="token punctuation">\</span>
+    <span class="token string">"Create .prettierignore"</span> <span class="token punctuation">\</span>
+    <span class="token string">"echo -e '# Ignore artifacts:<span class="token entity" title="\n">\n</span>package-lock.json<span class="token entity" title="\n">\n</span>build<span class="token entity" title="\n">\n</span>coverage' &gt;&gt; .prettierignore"</span>
 
-manualStep \
-    &quot;Add \&quot;prettier\&quot; to eslint config \&quot;extends\&quot;\n&quot; \
-    '\nExample:\n\t&quot;extends&quot;: [&quot;eslint:recommended&quot;, &quot;prettier&quot;],\n'
+manualStep <span class="token punctuation">\</span>
+    <span class="token string">"Add <span class="token entity" title="\&quot;">\"</span>prettier<span class="token entity" title="\&quot;">\"</span> to eslint config <span class="token entity" title="\&quot;">\"</span>extends<span class="token entity" title="\&quot;">\"</span><span class="token entity" title="\n">\n</span>"</span> <span class="token punctuation">\</span>
+    <span class="token string">'\nExample:\n\t"extends": ["eslint:recommended", "prettier"],\n'</span>
 
-checkRules() {
-    eval &quot;npx eslint-config-prettier $1&quot; ;
-}
+<span class="token function-name function">checkRules</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token builtin class-name">eval</span> <span class="token string">"npx eslint-config-prettier <span class="token variable">$1</span>"</span> <span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-stepWithInput \
-    &quot;Run npx eslint-config-prettier&quot; \
-    &quot;Provide a path to your files:&quot; \
+stepWithInput <span class="token punctuation">\</span>
+    <span class="token string">"Run npx eslint-config-prettier"</span> <span class="token punctuation">\</span>
+    <span class="token string">"Provide a path to your files:"</span> <span class="token punctuation">\</span>
     checkRules
 
-# Testing ESLint and Prettier
+<span class="token comment"># Testing ESLint and Prettier</span>
 
-testESLintPrettier() {
-    p=${1:-&quot;.&quot;}
-    eval &quot;npx eslint . $p&quot;
-    eval &quot;npx prettier --check . $p&quot;
-    eval &quot;npx prettier --write . $p&quot;
-}
+<span class="token function-name function">testESLintPrettier</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token assign-left variable">p</span><span class="token operator">=</span><span class="token variable">${1<span class="token operator">:-</span>"."}</span>
+    <span class="token builtin class-name">eval</span> <span class="token string">"npx eslint . <span class="token variable">$p</span>"</span>
+    <span class="token builtin class-name">eval</span> <span class="token string">"npx prettier --check . <span class="token variable">$p</span>"</span>
+    <span class="token builtin class-name">eval</span> <span class="token string">"npx prettier --write . <span class="token variable">$p</span>"</span>
+<span class="token punctuation">}</span>
 
-stepWithInput \
-    &quot;Test eslint and prettier&quot; \
-    &quot;Provide a path - [Press Enter] for default (.):&quot; \
+stepWithInput <span class="token punctuation">\</span>
+    <span class="token string">"Test eslint and prettier"</span> <span class="token punctuation">\</span>
+    <span class="token string">"Provide a path - [Press Enter] for default (.):"</span> <span class="token punctuation">\</span>
     testESLintPrettier
 
 
 
-# Adding helper scripts to package.json
-# https://docs.npmjs.com/cli/v7/commands/npm-pkg
+<span class="token comment"># Adding helper scripts to package.json</span>
+<span class="token comment"># https://docs.npmjs.com/cli/v7/commands/npm-pkg</span>
 
-step \
-    'Add &quot;prettier:check&quot; script to package.json' \
-    &quot;npm pkg set 'scripts.prettier:check'='npx prettier --check .'&quot;
+step <span class="token punctuation">\</span>
+    <span class="token string">'Add "prettier:check" script to package.json'</span> <span class="token punctuation">\</span>
+    <span class="token string">"npm pkg set 'scripts.prettier:check'='npx prettier --check .'"</span>
 
-step \
-    'Add &quot;prettier:fix&quot; script to package.json' \
-    &quot;npm pkg set 'scripts.prettier:fix'='npx prettier --write .'&quot;
+step <span class="token punctuation">\</span>
+    <span class="token string">'Add "prettier:fix" script to package.json'</span> <span class="token punctuation">\</span>
+    <span class="token string">"npm pkg set 'scripts.prettier:fix'='npx prettier --write .'"</span>
 
-step \
-    'Add &quot;lint&quot; script to package.json' \
-    &quot;npm pkg set 'scripts.lint'='npx eslint .'&quot;
+step <span class="token punctuation">\</span>
+    <span class="token string">'Add "lint" script to package.json'</span> <span class="token punctuation">\</span>
+    <span class="token string">"npm pkg set 'scripts.lint'='npx eslint .'"</span>
 
-# ---
+<span class="token comment"># ---</span>
 
-# Add extensions to VSCode (optional)
+<span class="token comment"># Add extensions to VSCode (optional)</span>
 
-addExtensions() {
-    mkdir -p .vscode
-    cat >.vscode/extensions.json &lt;&lt;EOL
+<span class="token function-name function">addExtensions</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">mkdir</span> <span class="token parameter variable">-p</span> .vscode
+    <span class="token function">cat</span> <span class="token operator">&gt;</span>.vscode/extensions.json <span class="token operator">&lt;&lt;</span><span class="token string">EOL
 {
-  &quot;recommendations&quot;: [
-    &quot;dbaeumer.vscode-eslint&quot;,
-    &quot;esbenp.prettier-vscode&quot;
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
   ]
 }
-EOL
-}
-stepWithFn \
-    &quot;Add recommended .vscode/extensions.json&quot; \
+EOL</span>
+<span class="token punctuation">}</span>
+stepWithFn <span class="token punctuation">\</span>
+    <span class="token string">"Add recommended .vscode/extensions.json"</span> <span class="token punctuation">\</span>
     addExtensions
 
-#TODO
-# husky
+<span class="token comment">#TODO</span>
+<span class="token comment"># husky</span>
 
-step \
-    &quot;Setup and install Husky to configure git hooks&quot; \
-    &quot;npx husky-init &amp;&amp; npm install  --save-dev&quot;
+step <span class="token punctuation">\</span>
+    <span class="token string">"Setup and install Husky to configure git hooks"</span> <span class="token punctuation">\</span>
+    <span class="token string">"npx husky-init &amp;&amp; npm install  --save-dev"</span>
 
-# lint-staged
-step \
-    &quot;Setup and install \&quot;lint-staged\&quot; to limit linting to staged files&quot; \
-    &quot;npm install lint-staged --save-dev&quot;
+<span class="token comment"># lint-staged</span>
+step <span class="token punctuation">\</span>
+    <span class="token string">"Setup and install <span class="token entity" title="\&quot;">\"</span>lint-staged<span class="token entity" title="\&quot;">\"</span> to limit linting to staged files"</span> <span class="token punctuation">\</span>
+    <span class="token string">"npm install lint-staged --save-dev"</span>
 
-addLintStagedConfig() {
-    npm pkg set 'lint-staged[*.{css,html,json,jsx,js,ts,tsx}][0]=prettier --write'
-    npm pkg set 'lint-staged[*.{js,jsx,ts,tsx}][0]=eslint --fix'
-}
+<span class="token function-name function">addLintStagedConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">npm</span> pkg <span class="token builtin class-name">set</span> <span class="token string">'lint-staged[*.{css,html,json,jsx,js,ts,tsx}][0]=prettier --write'</span>
+    <span class="token function">npm</span> pkg <span class="token builtin class-name">set</span> <span class="token string">'lint-staged[*.{js,jsx,ts,tsx}][0]=eslint --fix'</span>
+<span class="token punctuation">}</span>
 
-stepWithFn \
-    'Add &quot;lint-staged&quot; config to package.json' \
+stepWithFn <span class="token punctuation">\</span>
+    <span class="token string">'Add "lint-staged" config to package.json'</span> <span class="token punctuation">\</span>
     addLintStagedConfig
 
-updateHuskyPreCommit() {
-    cat &lt;&lt; EOF > &quot;$PWD/.husky/pre-commit&quot;
+<span class="token function-name function">updateHuskyPreCommit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">cat</span> <span class="token operator">&lt;&lt;</span> <span class="token string">EOF<span class="token bash punctuation"> <span class="token operator">&gt;</span> <span class="token string">"<span class="token environment constant">$PWD</span>/.husky/pre-commit"</span></span>
 #!/bin/sh
-. &quot;\$(dirname &quot;\$0&quot;)/_/husky.sh&quot;
+. "\<span class="token variable"><span class="token variable">$(</span><span class="token function">dirname</span> <span class="token string">"\<span class="token variable">$0</span>"</span><span class="token variable">)</span></span>/_/husky.sh"
 npx lint-staged
-EOF
-}
+EOF</span>
+<span class="token punctuation">}</span>
 
-stepWithFn \
-    &quot;Update .husky/pre-commit&quot;
+stepWithFn <span class="token punctuation">\</span>
+    <span class="token string">"Update .husky/pre-commit"</span>
     updateHuskyPreCommit
 
-#  Commitizen and friends
+<span class="token comment">#  Commitizen and friends</span>
 
 
-installCommitizen() {
-    npm install commitizen cz-conventional-changelog @commitlint/cli @commitlint/config-conventional --save-dev
-    npm pkg set 'scripts.commitizen:init'='commitizen init cz-conventional-changelog --save-dev --save-exact'
-    npm run commitizen:init
-}
+<span class="token function-name function">installCommitizen</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">npm</span> <span class="token function">install</span> commitizen cz-conventional-changelog @commitlint/cli @commitlint/config-conventional --save-dev
+    <span class="token function">npm</span> pkg <span class="token builtin class-name">set</span> <span class="token string">'scripts.commitizen:init'</span><span class="token operator">=</span><span class="token string">'commitizen init cz-conventional-changelog --save-dev --save-exact'</span>
+    <span class="token function">npm</span> run commitizen:init
+<span class="token punctuation">}</span>
 
-stepWithFn \
-    &quot;Install Commitizen, cz-conventional-changelog lint-staged and @commitlint&quot;
+stepWithFn <span class="token punctuation">\</span>
+    <span class="token string">"Install Commitizen, cz-conventional-changelog lint-staged and @commitlint"</span>
     installCommitizen
 
-addCommitLintConfig() {
-    cat &lt;&lt; EOF > &quot;$PWD/commitlint.config.js&quot;
-module.exports = { extends: [&quot;@commitlint/config-conventional&quot;] };
-EOF
-}
+<span class="token function-name function">addCommitLintConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">cat</span> <span class="token operator">&lt;&lt;</span> <span class="token string">EOF<span class="token bash punctuation"> <span class="token operator">&gt;</span> <span class="token string">"<span class="token environment constant">$PWD</span>/commitlint.config.js"</span></span>
+module.exports = { extends: ["@commitlint/config-conventional"] };
+EOF</span>
+<span class="token punctuation">}</span>
 
-stepWithFn \
-    &quot;Create commitlint.config.js&quot; \
+stepWithFn <span class="token punctuation">\</span>
+    <span class="token string">"Create commitlint.config.js"</span> <span class="token punctuation">\</span>
    addCommitLintConfig
 
-# .husky/prepare-commit-msg
+<span class="token comment"># .husky/prepare-commit-msg</span>
 
-updateHuskyPrepareCommitMessage() {
-    cat &lt;&lt; EOF > &quot;$PWD/.husky/prepare-commit-msg&quot;
+<span class="token function-name function">updateHuskyPrepareCommitMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">cat</span> <span class="token operator">&lt;&lt;</span> <span class="token string">EOF<span class="token bash punctuation"> <span class="token operator">&gt;</span> <span class="token string">"<span class="token environment constant">$PWD</span>/.husky/prepare-commit-msg"</span></span>
 #!/bin/sh
-. &quot;\$(dirname &quot;\$0&quot;)/_/husky.sh&quot;
+. "\<span class="token variable"><span class="token variable">$(</span><span class="token function">dirname</span> <span class="token string">"\<span class="token variable">$0</span>"</span><span class="token variable">)</span></span>/_/husky.sh"
 exec &lt; /dev/tty &amp;&amp; node_modules/.bin/cz --hook || true
-EOF
-}
+EOF</span>
+<span class="token punctuation">}</span>
 
-stepWithFn \
-    &quot;Update .husky/prepare-commit-msg&quot;
+stepWithFn <span class="token punctuation">\</span>
+    <span class="token string">"Update .husky/prepare-commit-msg"</span>
     updateHuskyPrepareCommitMessage
 
 
-# .husky/commit-msg
+<span class="token comment"># .husky/commit-msg</span>
 
-updateHuskyCommitMessage() {
-    cat &lt;&lt; EOF > &quot;$PWD/.husky/commit-msg&quot;
+<span class="token function-name function">updateHuskyCommitMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">cat</span> <span class="token operator">&lt;&lt;</span> <span class="token string">EOF<span class="token bash punctuation"> <span class="token operator">&gt;</span> <span class="token string">"<span class="token environment constant">$PWD</span>/.husky/commit-msg"</span></span>
 #!/bin/sh
-. &quot;\$(dirname &quot;\$0&quot;)/_/husky.sh&quot;
-npx commitlint --edit $1
-EOF
-}
+. "\<span class="token variable"><span class="token variable">$(</span><span class="token function">dirname</span> <span class="token string">"\<span class="token variable">$0</span>"</span><span class="token variable">)</span></span>/_/husky.sh"
+npx commitlint --edit <span class="token variable">$1</span>
+EOF</span>
+<span class="token punctuation">}</span>
 
-stepWithFn \
-    &quot;Update .husky/commit-msg&quot;
+stepWithFn <span class="token punctuation">\</span>
+    <span class="token string">"Update .husky/commit-msg"</span>
     updateHuskyCommitMessage
 
-makeHuskyExec() {
-    chmod +x &quot;$PWD/./husky/*&quot;
-}
+<span class="token function-name function">makeHuskyExec</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">chmod</span> +x <span class="token string">"<span class="token environment constant">$PWD</span>/./husky/*"</span>
+<span class="token punctuation">}</span>
 
-makeHuskyExec() {
-    chmod +x &quot;$PWD/.husky/commit-msg&quot;
-    chmod +x &quot;$PWD/.husky/pre-commit&quot;
-    chmod +x &quot;$PWD/.husky/prepare-commit-msg&quot;
-}
+<span class="token function-name function">makeHuskyExec</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">chmod</span> +x <span class="token string">"<span class="token environment constant">$PWD</span>/.husky/commit-msg"</span>
+    <span class="token function">chmod</span> +x <span class="token string">"<span class="token environment constant">$PWD</span>/.husky/pre-commit"</span>
+    <span class="token function">chmod</span> +x <span class="token string">"<span class="token environment constant">$PWD</span>/.husky/prepare-commit-msg"</span>
+<span class="token punctuation">}</span>
 
-stepWithFn \
-    &quot;Make .husky scripts executable&quot; \
+stepWithFn <span class="token punctuation">\</span>
+    <span class="token string">"Make .husky scripts executable"</span> <span class="token punctuation">\</span>
     makeHuskyExec
 
 
-echo -e &quot;\n\nAll done! Test with:\n\tgit add .\n\tgit commit -m \&quot;I am a cowboy\&quot;\n\n&quot;
+<span class="token builtin class-name">echo</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token entity" title="\n">\n</span><span class="token entity" title="\n">\n</span>All done! Test with:<span class="token entity" title="\n">\n</span><span class="token entity" title="\t">\t</span>git add .<span class="token entity" title="\n">\n</span><span class="token entity" title="\t">\t</span>git commit -m <span class="token entity" title="\&quot;">\"</span>I am a cowboy<span class="token entity" title="\&quot;">\"</span><span class="token entity" title="\n">\n</span><span class="token entity" title="\n">\n</span>"</span>
 </code></pre>
 <h2>Run gist from <a href="https://ohmyz.sh/">Zsh</a></h2>
 <p>I also created an function for my local Zsh config file that allows me to easily run bash script from a github gist.</p>
@@ -269,5 +270,5 @@ echo -e &quot;\n\nAll done! Test with:\n\tgit add .\n\tgit commit -m \&quot;I am
 <p><a href="https://gist.github.com/jonathanhudak/96600bce4540cb7bf29a4b9211bebbc5">https://gist.github.com/jonathanhudak/96600bce4540cb7bf29a4b9211bebbc5</a></p>
     </article>
   </main>
-</body>
-</html>
+
+</body></html>

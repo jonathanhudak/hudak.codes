@@ -1,0 +1,22 @@
+---
+title: Lume Static Site Generator
+date: 2023-02-07
+published: true
+templateEngine: mdx
+---
+
+[Lume](https://lume.land) is an awesome static site generator for the Deno ecosystem. I used it to build this site.
+
+One very trivial thing I struggled with just now is how to include a CSS file in my template. I was trying to do this:
+
+```html
+<link rel="stylesheet" href="style.css" />
+```
+
+But that didn't work. I got a 404 error. I tried a few other things, but nothing worked. Then I realized that I needed to use the `url` filter:
+
+```html
+<link rel="stylesheet" href="{{ '/style.css' }}" />
+```
+
+https://lume.land/docs/configuration/filters/#filters

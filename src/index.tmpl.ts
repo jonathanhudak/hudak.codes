@@ -6,8 +6,12 @@ export default function ({ search }: PageData) {
   return `
     <ul>
       ${posts
+        .sort((a, b) => b.data.date - a.data.date)
         .map(
-          (post) => `<li><a href="${post.data.url}">${post.data.title}</a></li>`
+          (post) =>
+            `<li>${post.data.date.toLocaleDateString()} - <a href="${
+              post.data.url
+            }">${post.data.title}</a></li>`
         )
         .join("")}
     </ul>

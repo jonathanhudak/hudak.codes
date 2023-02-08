@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>hudak.codes | html_page Deno module</title>
-  <link rel="stylesheet" href="https://the.missing.style/v1.0.5/missing.min.css">
+  <link rel="stylesheet" href="https://the.missing.style/v1.0.8/missing.css">
+  <link rel="stylesheet" href="https://the.missing.style/v1.0.8/missing-prism.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <main>
@@ -16,23 +17,23 @@
 
       <p>I have been learning about <a href="https://deno.land/">Deno</a> lately and often in prototypes I want to serve a simple HTML page so I created this simple module which simplifies creating a basic HTMl page.</p>
 <p>In the process I learned about how to <a href="https://deno.land/add_module">setup a Deno Third Party Module</a> and how to get it deployed to <a href="https://deno.land/x">https://deno.land/x</a></p>
-<pre><code class="language-ts">import { Application, Router } from &quot;https://deno.land/x/oak/mod.ts&quot;;
-import { makeHTMLPage } from &quot;https://deno.land/x/html_page/mod.ts&quot;;
+<pre class="language-ts" tabindex="0"><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> Application<span class="token punctuation">,</span> Router <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"https://deno.land/x/oak/mod.ts"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> makeHTMLPage <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"https://deno.land/x/html_page/mod.ts"</span><span class="token punctuation">;</span>
 
-const router = new Router();
+<span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-router.get(&quot;/&quot;, async (context) => {
-  context.response.body = makeHTMLPage({
-    body: `&lt;h1>Hello Deno 🦕&lt;/h1>`,
-    title: &quot;html_page&quot;,
-  });
-});
+router<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>context<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  context<span class="token punctuation">.</span>response<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token function">makeHTMLPage</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    body<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;h1&gt;Hello Deno 🦕&lt;/h1&gt;</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span>
+    title<span class="token operator">:</span> <span class="token string">"html_page"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-const app = new Application();
-app.use(router.routes());
-app.use(router.allowedMethods());
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Application</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-await app.listen({ port: 8002 });
+<span class="token keyword">await</span> app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token punctuation">{</span> port<span class="token operator">:</span> <span class="token number">8002</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <p>Deno playground: <a href="https://dash.deno.com/playground/careful-weasel-51">https://dash.deno.com/playground/careful-weasel-51</a></p>
 <p>Checkout the module here: <a href="https://deno.land/x/html_page">https://deno.land/x/html_page</a></p>
@@ -43,5 +44,5 @@ await app.listen({ port: 8002 });
 </ul>
     </article>
   </main>
-</body>
-</html>
+
+</body></html>
