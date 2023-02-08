@@ -22,10 +22,10 @@ jobs:
           deno task build --location=https://hudak.codes
       - name: DeployDeploy to GitHub Pages
         if: success()
-        # https://github.com/marketplace/actions/github-pages
-        uses: crazy-max/ghaction-github-pages@v3
+        # https://github.com/peaceiris/actions-gh-pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          fqdn: hudak.codes
+          cname: hudak.codes
           build_dir: _site
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
