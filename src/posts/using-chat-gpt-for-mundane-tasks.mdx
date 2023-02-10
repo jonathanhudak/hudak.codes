@@ -1,0 +1,184 @@
+---
+title: "In which I ask Chat GPT to do boring stuff for me."
+date: 2023-02-09
+published: true
+templateEngine: mdx
+---
+
+I have been tinkering with [a side-project](https://github.com/jonathanhudak/audio.hudak.land) to learn about the [WebAudio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+
+https://github.com/jonathanhudak/audio.hudak.land
+
+I thought it would be cool to give my [rudimentary synthesizer](https://jonathanhudak.github.io/audio.hudak.land/) computer keyboard event mapping so you could play it like in Ableton Live. So I filed an issue in my own repo https://github.com/jonathanhudak/audio.hudak.land/issues/1
+
+Today it occurred to me that I could easily ask Chat GPT to do this for me. So I did.
+
+## Me
+
+> Could you produce dictionary in javascript of keyboard key codes to piano keyboard following the MAX mapping?
+
+### [Chat GPT](https://chat.openai.com/chat/)
+
+Sure, here is an example of a JavaScript dictionary that maps keyboard key codes to piano keyboard notes following the MAX mapping:
+
+```javascript
+const keyCodeToPianoKey = {
+  90: "C3",
+  83: "C#3",
+  88: "D3",
+  68: "D#3",
+  67: "E3",
+  86: "F3",
+  71: "F#3",
+  66: "G3",
+  72: "G#3",
+  78: "A3",
+  74: "A#3",
+  77: "B3",
+  188: "C4",
+  76: "C#4",
+  190: "D4",
+  186: "D#4",
+  191: "E4",
+  222: "F4",
+  219: "F#4",
+  221: "G4",
+  220: "G#4",
+};
+```
+
+You can use this dictionary to map keyboard key codes to piano keys in your code. For example:
+
+```javascript
+document.addEventListener("keydown", (event) => {
+  const pianoKey = keyCodeToPianoKey[event.keyCode];
+  if (pianoKey) {
+    console.log(`Key pressed: ${pianoKey}`);
+  }
+});
+```
+
+Note that the above mapping is based on the MAX mapping and may not be suitable for other mappings.
+
+## me
+
+> can you extend `keyCodeToPianoKey` so that it includes the full range of the piano that a keyboard will produce? Also can you us the keydown event's `key` property instead of `keyCode`?
+
+### [Chat GPT](https://chat.openai.com/chat/)
+
+Certainly! Here's an updated version of the keyCodeToPianoKey dictionary that includes the full range of a standard piano keyboard and uses the key property of the keydown event:
+
+```javascript
+const keyCodeToPianoKey = {
+  a: "C3",
+  w: "C#3",
+  s: "D3",
+  e: "D#3",
+  d: "E3",
+  f: "F3",
+  t: "F#3",
+  g: "G3",
+  y: "G#3",
+  h: "A3",
+  u: "A#3",
+  j: "B3",
+  k: "C4",
+  o: "C#4",
+  l: "D4",
+  p: "D#4",
+  ";": "E4",
+  "[": "F4",
+  "'": "F#4",
+  "]": "G4",
+  "\\": "G#4",
+  z: "C5",
+  x: "C#5",
+  c: "D5",
+  v: "D#5",
+  b: "E5",
+  n: "F5",
+  m: "F#5",
+  ",": "G5",
+  ".": "G#5",
+  "/": "A5",
+  1: "C6",
+  2: "C#6",
+  3: "D6",
+  4: "D#6",
+  5: "E6",
+  6: "F6",
+  7: "F#6",
+  8: "G6",
+  9: "G#6",
+  0: "A6",
+  "-": "A#6",
+  "=": "B6",
+};
+```
+
+Here's an example of how you could use this dictionary to log the corresponding piano key when a keyboard key is pressed:
+
+```javascript
+document.addEventListener("keydown", (event) => {
+  const pianoKey = keyCodeToPianoKey[event.key];
+  if (pianoKey) {
+    console.log(`Key pressed: ${pianoKey}`);
+  }
+});
+```
+
+## me
+
+> could you convert that into the REAL mapping?
+
+### [Chat GPT](https://chat.openai.com/chat/)
+
+> Of course! Here's an updated version of the keyCodeToPianoKey dictionary that uses the REAL mapping:
+
+```javascript
+const keyCodeToPianoKey = {
+  a: "C2",
+  w: "C#2",
+  s: "D2",
+  e: "D#2",
+  d: "E2",
+  f: "F2",
+  t: "F#2",
+  g: "G2",
+  y: "G#2",
+  h: "A2",
+  u: "A#2",
+  j: "B2",
+  k: "C3",
+  o: "C#3",
+  l: "D3",
+  p: "D#3",
+  ";": "E3",
+  "[": "F3",
+  "'": "F#3",
+  "]": "G3",
+  "\\": "G#3",
+  z: "A3",
+  x: "A#3",
+  c: "B3",
+  v: "C4",
+  b: "C#4",
+  n: "D4",
+  m: "D#4",
+  ",": "E4",
+  ".": "F4",
+  "/": "F#4",
+  1: "G4",
+  2: "G#4",
+  3: "A4",
+  4: "A#4",
+  5: "B4",
+  6: "C5",
+  7: "C#5",
+  8: "D5",
+  9: "D#5",
+  0: "E5",
+  "-": "F5",
+  "=": "F#5",
+};
+```
