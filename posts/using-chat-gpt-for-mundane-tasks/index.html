@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hudak.codes - In which I ask Chat GPT to do boring stuff for me.</title>
+  <link rel="stylesheet" href="https://the.missing.style/v1.0.8/missing.css">
+  <link rel="stylesheet" href="https://the.missing.style/v1.0.8/missing-prism.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <article>
+      <header>
+        <a href="/">hudak.codes</a>
+      </header>
+
+      
+        <h1>In which I ask Chat GPT to do boring stuff for me.</h1>
+      
+
+      <p>I have been tinkering with <a href="https://github.com/jonathanhudak/audio.hudak.land">a side-project</a> to learn about the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">WebAudio API</a></p>
+<p><a href="https://github.com/jonathanhudak/audio.hudak.land">https://github.com/jonathanhudak/audio.hudak.land</a></p>
+<p>I thought it would be cool to give my <a href="https://jonathanhudak.github.io/audio.hudak.land/">rudimentary synthesizer</a> computer keyboard event mapping so you could play it like in Ableton Live. So I filed an issue in my own repo <a href="https://github.com/jonathanhudak/audio.hudak.land/issues/1">https://github.com/jonathanhudak/audio.hudak.land/issues/1</a></p>
+<p>Today it occurred to me that I could easily ask Chat GPT to do this for me. So I did.</p>
+<h2>Me</h2>
+<blockquote>
+<p>Could you produce dictionary in javascript of keyboard key codes to piano keyboard following the MAX mapping?</p>
+</blockquote>
+<h3><a href="https://chat.openai.com/chat/">Chat GPT</a></h3>
+<p>Sure, here is an example of a JavaScript dictionary that maps keyboard key codes to piano keyboard notes following the MAX mapping:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">const</span> keyCodeToPianoKey <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token number">90</span><span class="token operator">:</span> <span class="token string">"C3"</span><span class="token punctuation">,</span>
+  <span class="token number">83</span><span class="token operator">:</span> <span class="token string">"C#3"</span><span class="token punctuation">,</span>
+  <span class="token number">88</span><span class="token operator">:</span> <span class="token string">"D3"</span><span class="token punctuation">,</span>
+  <span class="token number">68</span><span class="token operator">:</span> <span class="token string">"D#3"</span><span class="token punctuation">,</span>
+  <span class="token number">67</span><span class="token operator">:</span> <span class="token string">"E3"</span><span class="token punctuation">,</span>
+  <span class="token number">86</span><span class="token operator">:</span> <span class="token string">"F3"</span><span class="token punctuation">,</span>
+  <span class="token number">71</span><span class="token operator">:</span> <span class="token string">"F#3"</span><span class="token punctuation">,</span>
+  <span class="token number">66</span><span class="token operator">:</span> <span class="token string">"G3"</span><span class="token punctuation">,</span>
+  <span class="token number">72</span><span class="token operator">:</span> <span class="token string">"G#3"</span><span class="token punctuation">,</span>
+  <span class="token number">78</span><span class="token operator">:</span> <span class="token string">"A3"</span><span class="token punctuation">,</span>
+  <span class="token number">74</span><span class="token operator">:</span> <span class="token string">"A#3"</span><span class="token punctuation">,</span>
+  <span class="token number">77</span><span class="token operator">:</span> <span class="token string">"B3"</span><span class="token punctuation">,</span>
+  <span class="token number">188</span><span class="token operator">:</span> <span class="token string">"C4"</span><span class="token punctuation">,</span>
+  <span class="token number">76</span><span class="token operator">:</span> <span class="token string">"C#4"</span><span class="token punctuation">,</span>
+  <span class="token number">190</span><span class="token operator">:</span> <span class="token string">"D4"</span><span class="token punctuation">,</span>
+  <span class="token number">186</span><span class="token operator">:</span> <span class="token string">"D#4"</span><span class="token punctuation">,</span>
+  <span class="token number">191</span><span class="token operator">:</span> <span class="token string">"E4"</span><span class="token punctuation">,</span>
+  <span class="token number">222</span><span class="token operator">:</span> <span class="token string">"F4"</span><span class="token punctuation">,</span>
+  <span class="token number">219</span><span class="token operator">:</span> <span class="token string">"F#4"</span><span class="token punctuation">,</span>
+  <span class="token number">221</span><span class="token operator">:</span> <span class="token string">"G4"</span><span class="token punctuation">,</span>
+  <span class="token number">220</span><span class="token operator">:</span> <span class="token string">"G#4"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+<p>You can use this dictionary to map keyboard key codes to piano keys in your code. For example:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript">document<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"keydown"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">event</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> pianoKey <span class="token operator">=</span> keyCodeToPianoKey<span class="token punctuation">[</span>event<span class="token punctuation">.</span>keyCode<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>pianoKey<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Key pressed: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>pianoKey<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Note that the above mapping is based on the MAX mapping and may not be suitable for other mappings.</p>
+<h2>me</h2>
+<blockquote>
+<p>can you extend <code>keyCodeToPianoKey</code> so that it includes the full range of the piano that a keyboard will produce? Also can you us the keydown event's <code>key</code> property instead of <code>keyCode</code>?</p>
+</blockquote>
+<h3><a href="https://chat.openai.com/chat/">Chat GPT</a></h3>
+<p>Certainly! Here's an updated version of the keyCodeToPianoKey dictionary that includes the full range of a standard piano keyboard and uses the key property of the keydown event:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">const</span> keyCodeToPianoKey <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">a</span><span class="token operator">:</span> <span class="token string">"C3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">w</span><span class="token operator">:</span> <span class="token string">"C#3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">s</span><span class="token operator">:</span> <span class="token string">"D3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">e</span><span class="token operator">:</span> <span class="token string">"D#3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">d</span><span class="token operator">:</span> <span class="token string">"E3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">f</span><span class="token operator">:</span> <span class="token string">"F3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">t</span><span class="token operator">:</span> <span class="token string">"F#3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">g</span><span class="token operator">:</span> <span class="token string">"G3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">y</span><span class="token operator">:</span> <span class="token string">"G#3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">h</span><span class="token operator">:</span> <span class="token string">"A3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">u</span><span class="token operator">:</span> <span class="token string">"A#3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">j</span><span class="token operator">:</span> <span class="token string">"B3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">k</span><span class="token operator">:</span> <span class="token string">"C4"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">o</span><span class="token operator">:</span> <span class="token string">"C#4"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">l</span><span class="token operator">:</span> <span class="token string">"D4"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">p</span><span class="token operator">:</span> <span class="token string">"D#4"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">";"</span><span class="token operator">:</span> <span class="token string">"E4"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"["</span><span class="token operator">:</span> <span class="token string">"F4"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"'"</span><span class="token operator">:</span> <span class="token string">"F#4"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"]"</span><span class="token operator">:</span> <span class="token string">"G4"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"\\"</span><span class="token operator">:</span> <span class="token string">"G#4"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">z</span><span class="token operator">:</span> <span class="token string">"C5"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">x</span><span class="token operator">:</span> <span class="token string">"C#5"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">c</span><span class="token operator">:</span> <span class="token string">"D5"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">v</span><span class="token operator">:</span> <span class="token string">"D#5"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">b</span><span class="token operator">:</span> <span class="token string">"E5"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">n</span><span class="token operator">:</span> <span class="token string">"F5"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">m</span><span class="token operator">:</span> <span class="token string">"F#5"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">","</span><span class="token operator">:</span> <span class="token string">"G5"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"."</span><span class="token operator">:</span> <span class="token string">"G#5"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"/"</span><span class="token operator">:</span> <span class="token string">"A5"</span><span class="token punctuation">,</span>
+  <span class="token number">1</span><span class="token operator">:</span> <span class="token string">"C6"</span><span class="token punctuation">,</span>
+  <span class="token number">2</span><span class="token operator">:</span> <span class="token string">"C#6"</span><span class="token punctuation">,</span>
+  <span class="token number">3</span><span class="token operator">:</span> <span class="token string">"D6"</span><span class="token punctuation">,</span>
+  <span class="token number">4</span><span class="token operator">:</span> <span class="token string">"D#6"</span><span class="token punctuation">,</span>
+  <span class="token number">5</span><span class="token operator">:</span> <span class="token string">"E6"</span><span class="token punctuation">,</span>
+  <span class="token number">6</span><span class="token operator">:</span> <span class="token string">"F6"</span><span class="token punctuation">,</span>
+  <span class="token number">7</span><span class="token operator">:</span> <span class="token string">"F#6"</span><span class="token punctuation">,</span>
+  <span class="token number">8</span><span class="token operator">:</span> <span class="token string">"G6"</span><span class="token punctuation">,</span>
+  <span class="token number">9</span><span class="token operator">:</span> <span class="token string">"G#6"</span><span class="token punctuation">,</span>
+  <span class="token number">0</span><span class="token operator">:</span> <span class="token string">"A6"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"-"</span><span class="token operator">:</span> <span class="token string">"A#6"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"="</span><span class="token operator">:</span> <span class="token string">"B6"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Here's an example of how you could use this dictionary to log the corresponding piano key when a keyboard key is pressed:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript">document<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"keydown"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">event</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> pianoKey <span class="token operator">=</span> keyCodeToPianoKey<span class="token punctuation">[</span>event<span class="token punctuation">.</span>key<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>pianoKey<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Key pressed: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>pianoKey<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h2>me</h2>
+<blockquote>
+<p>could you convert that into the REAL mapping?</p>
+</blockquote>
+<h3><a href="https://chat.openai.com/chat/">Chat GPT</a></h3>
+<blockquote>
+<p>Of course! Here's an updated version of the keyCodeToPianoKey dictionary that uses the REAL mapping:</p>
+</blockquote>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">const</span> keyCodeToPianoKey <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">a</span><span class="token operator">:</span> <span class="token string">"C2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">w</span><span class="token operator">:</span> <span class="token string">"C#2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">s</span><span class="token operator">:</span> <span class="token string">"D2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">e</span><span class="token operator">:</span> <span class="token string">"D#2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">d</span><span class="token operator">:</span> <span class="token string">"E2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">f</span><span class="token operator">:</span> <span class="token string">"F2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">t</span><span class="token operator">:</span> <span class="token string">"F#2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">g</span><span class="token operator">:</span> <span class="token string">"G2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">y</span><span class="token operator">:</span> <span class="token string">"G#2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">h</span><span class="token operator">:</span> <span class="token string">"A2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">u</span><span class="token operator">:</span> <span class="token string">"A#2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">j</span><span class="token operator">:</span> <span class="token string">"B2"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">k</span><span class="token operator">:</span> <span class="token string">"C3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">o</span><span class="token operator">:</span> <span class="token string">"C#3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">l</span><span class="token operator">:</span> <span class="token string">"D3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">p</span><span class="token operator">:</span> <span class="token string">"D#3"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">";"</span><span class="token operator">:</span> <span class="token string">"E3"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"["</span><span class="token operator">:</span> <span class="token string">"F3"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"'"</span><span class="token operator">:</span> <span class="token string">"F#3"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"]"</span><span class="token operator">:</span> <span class="token string">"G3"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"\\"</span><span class="token operator">:</span> <span class="token string">"G#3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">z</span><span class="token operator">:</span> <span class="token string">"A3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">x</span><span class="token operator">:</span> <span class="token string">"A#3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">c</span><span class="token operator">:</span> <span class="token string">"B3"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">v</span><span class="token operator">:</span> <span class="token string">"C4"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">b</span><span class="token operator">:</span> <span class="token string">"C#4"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">n</span><span class="token operator">:</span> <span class="token string">"D4"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">m</span><span class="token operator">:</span> <span class="token string">"D#4"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">","</span><span class="token operator">:</span> <span class="token string">"E4"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"."</span><span class="token operator">:</span> <span class="token string">"F4"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"/"</span><span class="token operator">:</span> <span class="token string">"F#4"</span><span class="token punctuation">,</span>
+  <span class="token number">1</span><span class="token operator">:</span> <span class="token string">"G4"</span><span class="token punctuation">,</span>
+  <span class="token number">2</span><span class="token operator">:</span> <span class="token string">"G#4"</span><span class="token punctuation">,</span>
+  <span class="token number">3</span><span class="token operator">:</span> <span class="token string">"A4"</span><span class="token punctuation">,</span>
+  <span class="token number">4</span><span class="token operator">:</span> <span class="token string">"A#4"</span><span class="token punctuation">,</span>
+  <span class="token number">5</span><span class="token operator">:</span> <span class="token string">"B4"</span><span class="token punctuation">,</span>
+  <span class="token number">6</span><span class="token operator">:</span> <span class="token string">"C5"</span><span class="token punctuation">,</span>
+  <span class="token number">7</span><span class="token operator">:</span> <span class="token string">"C#5"</span><span class="token punctuation">,</span>
+  <span class="token number">8</span><span class="token operator">:</span> <span class="token string">"D5"</span><span class="token punctuation">,</span>
+  <span class="token number">9</span><span class="token operator">:</span> <span class="token string">"D#5"</span><span class="token punctuation">,</span>
+  <span class="token number">0</span><span class="token operator">:</span> <span class="token string">"E5"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"-"</span><span class="token operator">:</span> <span class="token string">"F5"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"="</span><span class="token operator">:</span> <span class="token string">"F#5"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+    </article>
+  </main>
+
+</body></html>
