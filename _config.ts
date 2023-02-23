@@ -6,13 +6,19 @@ import prism from "lume/plugins/prism.ts";
 // https://unpkg.com/browse/prismjs@1.29.0/components/
 import "npm:prismjs@1.29.0/components/prism-bash.js";
 import "npm:prismjs@1.29.0/components/prism-typescript.js";
-
+import StackBlitzEmbed from "./src/lib/StackBlitzEmbed.tsx";
 const site = lume({
   src: "./src",
 });
 
 site.use(jsx());
-site.use(mdx());
+site.use(
+  mdx({
+    components: {
+      StackBlitzEmbed,
+    },
+  })
+);
 site.use(
   prism({
     extensions: [".md", ".mdx"],

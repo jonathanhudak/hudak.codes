@@ -1,0 +1,79 @@
+---
+title: Generating random colors for fun and profit
+published: true
+---
+
+I came across this snippet of code on Stack Overflow and thought it was pretty cool. It generates a random color in hex format.
+
+```js
+// https://stackoverflow.com/questions/61922779/how-to-generate-non-repeating-random-results
+function generateRandomColor() {
+  return "#" + Math.floor(Math.random() * 16777215).toString(16);
+}
+```
+
+I extended it to generate a grid of random colors:
+
+<StackBlitzEmbed src="https://stackblitz.com/edit/typescript-1b4bno?embed=1&file=index.ts" />
+
+I asked ChatGPT if it could make edits to ensure the color would be unique. It suggested using a cache. Given that I only plan to generate a few hundred numbers that seems simple and effective.
+
+```js
+const generatedColors = [];
+
+function generateRandomColor() {
+  let newColor;
+  do {
+    newColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+  } while (generatedColors.includes(newColor));
+  generatedColors.push(newColor);
+  return newColor;
+}
+```
+
+I then asked ChatGPT if it could update the code to return [HSL colors](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hsl) instead.
+
+This function produces much different results!
+
+<StackBlitzEmbed src="https://stackblitz.com/edit/typescript-srptzz?file=index.ts" />
+
+> Maybe one day I will extend this to output complementary color combinations...
+
+I as Chat GPT a moment later to generate appealing color combinations in sets of 5. It came up with this:
+
+```js
+const generatedColors = [];
+
+function generateRandomColorSet() {
+  const hue = Math.floor(Math.random() * 360);
+  const saturationBase = Math.floor(Math.random() * 61) + 20;
+  const lightnessBase = Math.floor(Math.random() * 41) + 30;
+  const alpha = 1;
+  const saturationStep = 10;
+  const lightnessStep = 10;
+  let colorSet = [];
+
+  for (let i = 0; i < 5; i++) {
+    const saturation = saturationBase + i * saturationStep;
+    const lightness = lightnessBase + i * lightnessStep;
+    const newColor = `hsla(${hue}, ${saturation}%, ${lightness}%, ${alpha})`;
+    colorSet.push(newColor);
+  }
+
+  // Check if the color set is unique, otherwise try again
+  while (
+    generatedColors.some((set) =>
+      set.every((color, i) => color === colorSet[i])
+    )
+  ) {
+    colorSet = generateRandomColorSet();
+  }
+
+  generatedColors.push(colorSet);
+  return colorSet;
+}
+```
+
+<StackBlitzEmbed src="https://stackblitz.com/edit/typescript-qpw54t?file=style.css" />
+
+Try it out and see what you come up with!
