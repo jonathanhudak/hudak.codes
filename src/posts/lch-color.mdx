@@ -1,0 +1,15 @@
+---
+title: Generating random LCH colors
+published: true
+---
+
+After [my previous post](/posts/color) about generating random color I remembered I had read about many new color spaces and CSS color features that have been landing in browsers recently. One of them is LCH, which is a cylindrical color space that is perceptually uniform. It is also the color space used by the [HSLuv](https://www.hsluv.org/) color space, which is a perceptually uniform color space that is designed to be more human-friendly than HSL.
+
+I asked Chat GPT to adapt my previous code to generate random colors in the LCH color space. It is the most amazing version by far. I felt compelled to add a refresh button. It's almost meditative to refresh and enjoy these colors. It _does_ require d3. I haven't bothered to look into whether its possible without yet.
+
+<StackBlitzEmbed src="https://stackblitz.com/edit/typescript-qpw54t?embed=1&file=index.ts&view=preview" />
+
+### Links to learn more about LCH, color spaces and new CSS color properties.
+
+- https://web.dev/state-of-css-2022/#color-level-4-and-5
+- https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/
