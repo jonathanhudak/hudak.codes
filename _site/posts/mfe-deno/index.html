@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hudak.codes - Micro Frontends with Deno</title>
+  <link rel="stylesheet" href="https://the.missing.style/v1.0.8/missing.css">
+  <link rel="stylesheet" href="https://the.missing.style/v1.0.8/missing-prism.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <article>
+      <header>
+        <a href="/">hudak.codes</a>
+      </header>
+
+      
+        <h1>Micro Frontends with Deno</h1>
+      
+
+      <p>At work I have been learning and thinking about Micro Frontend Architecture.</p>
+<p><a href="https://martinfowler.com/articles/micro-frontends.html#Run-timeIntegrationViaJavascript">https://martinfowler.com/articles/micro-frontends.html#Run-timeIntegrationViaJavascript</a></p>
+<p>I have been using Deno for a while now and I have been thinking about how to use it to build Micro Frontends.</p>
+<div><iframe src="https://dak-mfe-shell.deno.dev/" style="width: 100%; height: 500px; border: 0; border-radius: 4px; overflow: hidden;"></iframe></div>
+<p>It is built from multiple independent and isolated servers hosted on Deno Deploy.</p>
+<ul>
+<li><a href="https://dash.deno.com/playground/dak-mfe-manifest">https://dash.deno.com/playground/dak-mfe-manifest</a></li>
+<li><a href="https://dash.deno.com/playground/dak-mfe-shell">https://dash.deno.com/playground/dak-mfe-shell</a></li>
+<li><a href="https://dash.deno.com/playground/dak-mfe-nav">https://dash.deno.com/playground/dak-mfe-nav</a></li>
+<li><a href="https://dash.deno.com/playground/dak-mfe-home">https://dash.deno.com/playground/dak-mfe-home</a></li>
+<li><a href="https://dash.deno.com/playground/dak-mfe-about">https://dash.deno.com/playground/dak-mfe-about</a></li>
+</ul>
+<p>The shell is the main application that loads the other micro frontends.</p>
+<p>The manifest is a simple JSON file that contains the list of micro frontends and their URLs.</p>
+<p>The nav is a simple navigation bar that is loaded into the shell.</p>
+<p>The home and about are simple pages that are loaded into the shell.</p>
+    </article>
+  </main>
+  <footer class="footer">
+    <a href="https://jonathanhudak.com">Jonathan Hudak © 2023</a>
+    <a href="https://github.com/jonathanhudak">Github</a>
+    <a href="https://twitter.com/hudak_jonathan">Twitter</a>
+    <a href="https://www.linkedin.com/in/jonathan-hudak-084a529/">LinkedIn</a>
+  </footer>
+
+</body></html>

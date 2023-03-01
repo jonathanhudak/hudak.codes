@@ -16,6 +16,7 @@ site.use(jsx());
 site.use(
   mdx({
     components: {
+      IframeEmbed: StackBlitzEmbed,
       StackBlitzEmbed,
     },
   })

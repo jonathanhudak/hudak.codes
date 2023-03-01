@@ -1,0 +1,30 @@
+---
+title: Micro Frontends with Deno
+date: 2023-02-28
+published: false
+templateEngine: mdx
+---
+
+At work I have been learning and thinking about Micro Frontend Architecture.
+
+https://martinfowler.com/articles/micro-frontends.html#Run-timeIntegrationViaJavascript
+
+I have been using Deno for a while now and I have been thinking about how to use it to build Micro Frontends.
+
+<IframeEmbed src="https://dak-mfe-shell.deno.dev/" />
+
+It is built from multiple independent and isolated servers hosted on Deno Deploy.
+
+- https://dash.deno.com/playground/dak-mfe-manifest
+- https://dash.deno.com/playground/dak-mfe-shell
+- https://dash.deno.com/playground/dak-mfe-nav
+- https://dash.deno.com/playground/dak-mfe-home
+- https://dash.deno.com/playground/dak-mfe-about
+
+The shell is the main application that loads the other micro frontends.
+
+The manifest is a simple JSON file that contains the list of micro frontends and their URLs.
+
+The nav is a simple navigation bar that is loaded into the shell.
+
+The home and about are simple pages that are loaded into the shell.
