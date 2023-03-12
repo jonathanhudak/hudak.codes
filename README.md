@@ -6,4 +6,3 @@ A blog for learning about code in public.
 
 * https://deno.com/blog/build-a-static-site-with-lume
 * https://github.com/lumeland/base-blog
-* 
