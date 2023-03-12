@@ -4,3 +4,4 @@ public
 .env
 _bin
 .DS_Store
+_site
