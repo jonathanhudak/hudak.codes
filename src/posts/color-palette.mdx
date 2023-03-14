@@ -1,0 +1,19 @@
+---
+title: Generating random CSS color palettes
+published: true
+---
+
+Building upon my previous posts on **color** [Generating random LCH colors](/posts/lch-color/) and [Generating random colors for fun and profit](/posts/color) I have been thinking about how I might produce a simple tool to randomly create pleasant color themes for UI.
+
+There are plenty of existing tools for generating color palettes on the web already but of course I like to do things the hard way in hopes that perhaps I might learn something.
+
+Below is a start of such a tool which utilizes the LCH color space to generate a random color palette. After playing with it a bit, however I realized that it is usually best to begin with a consistent starting point.
+
+ChatGPT introduced me to [chroma.js](https://gka.github.io/chroma.js) which came in handy also.
+
+<StackBlitzEmbed src="https://stackblitz.com/edit/react-ts-pml3k2?embed=1&file=App.tsx&view=preview" />
+
+Next I am thinking of adding:
+
+- A UI preview using the color palette. Ideally with the ability to edit the markup
+- A way to save palettes in a url md5 hash to easily share or store palettes
