@@ -3,21 +3,25 @@ import jsx from "lume/plugins/jsx_preact.ts";
 import mdx from "lume/plugins/mdx.ts";
 import lightningCss from "lume/plugins/lightningcss.ts";
 import prism from "lume/plugins/prism.ts";
+import date from "lume/plugins/date.ts";
 // https://unpkg.com/browse/prismjs@1.29.0/components/
 import "npm:prismjs@1.29.0/components/prism-bash.js";
 import "npm:prismjs@1.29.0/components/prism-typescript.js";
 import modifyUrls from "lume/plugins/modify_urls.ts";
 import StackBlitzEmbed from "./src/lib/StackBlitzEmbed.tsx";
+import ScriptTag from "./src/lib/ScriptTag.tsx";
 const site = lume({
   src: "./src",
 });
 
 site.use(jsx());
+site.use(date());
 site.use(
   mdx({
     components: {
       IframeEmbed: StackBlitzEmbed,
       StackBlitzEmbed,
+      ScriptTag,
     },
   })
 );
