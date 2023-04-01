@@ -292,6 +292,7 @@
     "https://deno.land/x/deno_dom@v0.1.36-alpha/src/dom/utils.ts": "ecd889ba74f3ce282620d8ca1d4d5e0365e6cc86101d2352f3bbf936ae496e2c",
     "https://deno.land/x/deno_dom@v0.1.36-alpha/src/parser.ts": "b65eb7e673fa7ca611de871de109655f0aa9fa35ddc1de73df1a5fc2baafc332",
     "https://deno.land/x/events@v1.0.0/mod.ts": "3e2655ffa5e86a6ee01022f964b7fdc6152c007106c47b02958e766c6614dbaf",
+    "https://deno.land/x/github_embed@0.1.0/mod.ts": "8e402a6de27d20ba6dee99cfc7fd0706edb76bfe1b8573e97632c71730053a54",
     "https://deno.land/x/imagemagick_deno@0.0.14/mod.ts": "6b58c767d2308488597c3660e7ff399ede244198d7903900fa43a49cf93c7796",
     "https://deno.land/x/imagemagick_deno@0.0.14/src/alpha-option.ts": "749a9f3309e491ec09a1d6bc50ce95d9733887d9f57c6863c4ff1c7e9610227b",
     "https://deno.land/x/imagemagick_deno@0.0.14/src/auto-threshold-method.ts": "bb08a00046137e441930e56190b6db10c5fe657cb0a6142cd565a40b1c4250a2",

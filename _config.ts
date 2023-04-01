@@ -8,9 +8,14 @@ import date from "lume/plugins/date.ts";
 import "npm:prismjs@1.29.0/components/prism-bash.js";
 import "npm:prismjs@1.29.0/components/prism-typescript.js";
 import modifyUrls from "lume/plugins/modify_urls.ts";
-import StackBlitzEmbed from "./src/lib/StackBlitzEmbed.tsx";
+import StackBlitzEmbed from "./src/_components/StackBlitzEmbed.tsx";
+import GithubEmbed from "./src/_components/GithubEmbed.tsx";
+
+const location = new URL("http://localhost:3000");
+
 const site = lume({
   src: "./src",
+  location,
 });
 
 site.use(jsx());
@@ -21,6 +26,7 @@ site.use(
     components: {
       IframeEmbed: StackBlitzEmbed,
       StackBlitzEmbed,
+      GithubEmbed,
     },
   })
 );
