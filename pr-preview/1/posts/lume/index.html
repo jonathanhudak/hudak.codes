@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hudak.codes - Lume Static Site Generator</title>
+   <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+    <link rel="stylesheet" href="https://unpkg.com/missingprism.css@1.1.1">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <article>
+      <header>
+        <a href="/">hudak.codes</a>
+      </header>
+
+      
+        <h1>Lume Static Site Generator</h1>
+        <strong>2023-02-07</strong>
+      
+
+      <p><a href="https://lume.land">Lume</a> is an awesome static site generator for the Deno ecosystem. I used it to build this site.</p>
+<p>One very trivial thing I struggled with just now is how to include a CSS file in my template. I was trying to do this:</p>
+<pre class="language-html" tabindex="0"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>link</span> <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>stylesheet<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>style.css<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+</code></pre>
+<p>But that didn't work. I got a 404 error. I tried a few other things, but nothing worked. Then I realized that I needed to use the <code>url</code> filter:</p>
+<pre class="language-html" tabindex="0"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>link</span> <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>stylesheet<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>{{ '/style.css' }}<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+</code></pre>
+<p><a href="https://lume.land/docs/configuration/filters/#filters">https://lume.land/docs/configuration/filters/#filters</a></p>
+    </article>
+  </main>
+  <footer class="footer">
+    <a href="https://jonathanhudak.com">Jonathan Hudak © 2023</a>
+    <a href="https://github.com/jonathanhudak">Github</a>
+    <a href="https://twitter.com/hudak_jonathan">Twitter</a>
+    <a href="https://www.linkedin.com/in/jonathan-hudak-084a529/">LinkedIn</a>
+  </footer>
+
+</body></html>

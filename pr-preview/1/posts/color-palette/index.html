@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hudak.codes - Generating random CSS color palettes</title>
+   <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+    <link rel="stylesheet" href="https://unpkg.com/missingprism.css@1.1.1">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <article>
+      <header>
+        <a href="/">hudak.codes</a>
+      </header>
+
+      
+        <h1>Generating random CSS color palettes</h1>
+        <strong>2023-03-13</strong>
+      
+
+      <p>Building upon my previous posts on <strong>color</strong> <a href="/posts/lch-color/">Generating random LCH colors</a> and <a href="/posts/color">Generating random colors for fun and profit</a> I have been thinking about how I might produce a simple tool to randomly create pleasant color themes for UI.</p>
+<p>There are plenty of existing tools for generating color palettes on the web already but of course I like to do things the hard way in hopes that perhaps I might learn something.</p>
+<p>Below is a start of such a tool which utilizes the LCH color space to generate a random color palette. After playing with it a bit, however I realized that it is usually best to begin with a consistent starting point.</p>
+<p>ChatGPT introduced me to <a href="https://gka.github.io/chroma.js">chroma.js</a> which came in handy also.</p>
+<div><iframe src="https://stackblitz.com/edit/react-ts-pml3k2?embed=1&amp;file=App.tsx&amp;view=preview" style="width: 100%; height: 500px; border: 0; border-radius: 4px; overflow: hidden;"></iframe></div>
+<p>Next I am thinking of adding:</p>
+<ul>
+<li>A UI preview using the color palette. Ideally with the ability to edit the markup</li>
+<li>A way to save palettes in a url md5 hash to easily share or store palettes</li>
+</ul>
+    </article>
+  </main>
+  <footer class="footer">
+    <a href="https://jonathanhudak.com">Jonathan Hudak © 2023</a>
+    <a href="https://github.com/jonathanhudak">Github</a>
+    <a href="https://twitter.com/hudak_jonathan">Twitter</a>
+    <a href="https://www.linkedin.com/in/jonathan-hudak-084a529/">LinkedIn</a>
+  </footer>
+
+</body></html>
