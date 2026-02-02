@@ -2,15 +2,15 @@ name: PR Preview
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, closed]
 
-# Allow one concurrent deployment per PR
 concurrency:
   group: pr-preview-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
   build-preview:
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -25,12 +25,87 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Build site for preview
+      - name: Configure for preview
         run: |
-          deno task build --location=https://jonathanhudak.github.io/hudak.codes/pr-preview/${{ github.event.pull_request.number }}/
-        env:
-          # Override base path for preview
-          LUME_BASE: /hudak.codes/pr-preview/${{ github.event.pull_request.number }}/
+          # Add base_path plugin to config
+          cat > _config.ts << 'CONFIGEOF'
+          import lume from "lume/mod.ts";
+          import jsx from "lume/plugins/jsx_preact.ts";
+          import mdx from "lume/plugins/mdx.ts";
+          import lightningCss from "lume/plugins/lightningcss.ts";
+          import prism from "lume/plugins/prism.ts";
+          import date from "lume/plugins/date.ts";
+          import basePath from "lume/plugins/base_path.ts";
+          import "npm:prismjs@1.29.0/components/prism-bash.js";
+          import "npm:prismjs@1.29.0/components/prism-typescript.js";
+          import modifyUrls from "lume/plugins/modify_urls.ts";
+          import StackBlitzEmbed from "./src/_components/StackBlitzEmbed.tsx";
+          import GithubEmbed from "./src/_components/GithubEmbed.tsx";
+
+          const site = lume({
+            src: "./src",
+            location: new URL("https://jonathanhudak.github.io/hudak.codes/pr-preview/${{ github.event.pull_request.number }}/"),
+          });
+
+          site.use(basePath());
+          site.use(jsx());
+          site.use(date());
+          site.use(
+            mdx({
+              components: {
+                IframeEmbed: StackBlitzEmbed,
+                StackBlitzEmbed,
+                GithubEmbed,
+              },
+            })
+          );
+          site.use(
+            prism({
+              extensions: [".md", ".mdx"],
+            })
+          );
+
+          site.preprocess([".mdx"], async (page) => {
+            const content = page?.data?.content?.toString();
+            const regex = /\[GithubEmbed\s+url="([^"]+)"\]/;
+
+            if (content) {
+              const urlMatch = content.match(regex);
+              const githubEmbedUrl = urlMatch ? urlMatch[1] : "";
+
+              if (urlMatch) {
+                const { scriptId, url } = await (
+                  await fetch("https://jonathanhudak-github-embed.deno.dev/embed-id", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      githubUrl: githubEmbedUrl,
+                    }),
+                  })
+                ).json();
+                const htmlString = \`
+          <div class="box">
+          <div id="ghe-\${scriptId}"></div>
+          <script type="module" src="https://jonathanhudak-github-embed.deno.dev/embed-script/\${scriptId}"></script>
+          <footer>
+          <a href="\${url}">\${url}</a>
+          </footer>
+          </div>\`;
+                const output = content.replace(regex, htmlString);
+                page.data.content = output;
+              }
+            }
+          });
+          site.use(lightningCss());
+          site.use(modifyUrls());
+
+          export default site;
+          CONFIGEOF
+
+      - name: Build site for preview
+        run: deno task build
 
       - name: Deploy PR Preview
         uses: peaceiris/actions-gh-pages@v4
@@ -38,8 +113,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: _site
           destination_dir: pr-preview/${{ github.event.pull_request.number }}
-          # Don't add CNAME for previews
-          # Keep existing files (other PR previews)
           keep_files: true
 
       - name: Comment PR with preview link
@@ -49,7 +122,6 @@ jobs:
             const prNumber = context.payload.pull_request.number;
             const previewUrl = `https://jonathanhudak.github.io/hudak.codes/pr-preview/${prNumber}/`;
             
-            // Check if we already commented
             const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -58,20 +130,12 @@ jobs:
             
             const botComment = comments.data.find(comment => 
               comment.user.type === 'Bot' && 
-              comment.body.includes('🚀 **Preview deployed!**')
+              comment.body.includes('Preview deployed')
             );
             
-            const body = `🚀 **Preview deployed!**
-            
-            Preview URL: ${previewUrl}
-            
-            _This preview will be updated with each push to this PR._
-            
-            ---
-            <sub>🍌 Deployed by PR Preview workflow</sub>`;
+            const body = `🚀 **Preview deployed!**\n\n**Preview URL:** ${previewUrl}\n\n_Updated with each push._\n\n---\n<sub>🍌 PR Preview</sub>`;
             
             if (botComment) {
-              // Update existing comment
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -79,7 +143,6 @@ jobs:
                 body: body
               });
             } else {
-              // Create new comment
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -88,10 +151,9 @@ jobs:
               });
             }
 
-  # Cleanup old previews when PR is closed
   cleanup:
-    runs-on: ubuntu-latest
     if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       
@@ -101,7 +163,7 @@ jobs:
         with:
           ref: gh-pages
           
-      - name: Remove PR preview directory
+      - name: Remove PR preview
         run: |
           if [ -d "pr-preview/${{ github.event.pull_request.number }}" ]; then
             rm -rf "pr-preview/${{ github.event.pull_request.number }}"
