@@ -30,20 +30,15 @@ jobs:
           PR_NUM=${{ github.event.pull_request.number }}
           PREVIEW_URL="https://jonathanhudak.github.io/hudak.codes/pr-preview/${PR_NUM}/"
           
-          # Add base_path import and plugin
-          sed -i '1a import basePath from "lume/plugins/base_path.ts";' _config.ts
+          # Update the location in _config.ts
+          sed -i "s|http://localhost:3000|${PREVIEW_URL}|g" _config.ts
           
-          # Update location URL
-          sed -i "s|const location = new URL(\"http://localhost:3000\");|const location = new URL(\"${PREVIEW_URL}\");|" _config.ts
-          
-          # Add base_path plugin after lume() call
-          sed -i '/const site = lume({/,/});/a site.use(basePath());' _config.ts
-          
-          echo "Updated _config.ts:"
-          head -30 _config.ts
+          echo "Updated location in _config.ts"
+          grep "location" _config.ts
 
       - name: Build site for preview
-        run: deno task build
+        run: |
+          echo "import 'lume/cli.ts'" | deno run --unstable -A - --config=_config.preview.ts
 
       - name: Deploy PR Preview
         uses: peaceiris/actions-gh-pages@v4
@@ -71,7 +66,7 @@ jobs:
               comment.body.includes('Preview deployed')
             );
             
-            const body = `🚀 **Preview deployed!**\n\n**Preview URL:** ${previewUrl}\n\n_Updated with each push._\n\n---\n<sub>🍌 PR Preview</sub>`;
+            const body = `🚀 **Preview deployed!**\n\n**Preview URL:** ${previewUrl}\n\n_Updated with each push._`;
             
             if (botComment) {
               await github.rest.issues.updateComment({
