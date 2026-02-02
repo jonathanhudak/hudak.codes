@@ -28,3 +28,4 @@ jobs:
           cname: hudak.codes
           publish_dir: _site
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          keep_files: true
