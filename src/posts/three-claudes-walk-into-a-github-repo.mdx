@@ -1,0 +1,265 @@
+---
+title: "Three Claudes Walk Into a GitHub Repo"
+date: 2026-02-02
+published: true
+templateEngine: mdx
+---
+
+Last night I set up an AI to manage other AIs that write code. It took two hours of debugging, one breakthrough, and resulted in three features built simultaneously in under 15 minutes. Here's the whole ridiculous story.
+
+## The Setup
+
+I've been running an AI assistant called [OpenClaw](https://github.com/openclaw/openclaw) locally for about a week now. I named it Mr. Banana Head (long story, but basically: if you're going to have a persistent AI companion, give it a ridiculous name so you don't take yourself too seriously).
+
+Mr. Banana Head lives in Discord, has access to my files, calendar, and GitHub repos, and maintains memory across sessions through markdown files. It's like having a very capable intern who never sleeps and has read all my project documentation.
+
+But here's the thing: I have too many project ideas and not enough implementation time. I'm good at writing PRDs (Product Requirements Documents), but slow at actually building things. What if I could write the spec and let AI do the boring parts?
+
+Enter the [Claude Code GitHub Action](https://github.com/anthropics/claude-code-action).
+
+## The Promise
+
+The idea is beautifully simple:
+
+1. Create a GitHub issue with a detailed task description
+2. Comment `@claude` on the issue
+3. Claude spins up, reads your codebase, implements the feature
+4. You review the PR and iterate
+
+Three AI agents working together:
+- **Me** (human): Write issues, make decisions, merge PRs
+- **Mr. Banana Head** (OpenClaw): Orchestrate tasks, @mention Claude, review output
+- **Claude Code Action** (GitHub): Actually write the code
+
+All three are Claude 4.5 under the hood. It's Claudes all the way down.
+
+## The Struggle
+
+Setting this up was... not straightforward. Here's the debugging journey so you don't have to repeat my mistakes.
+
+### Attempt 1: Just Use the API Key
+
+I added a simple workflow:
+
+```yaml
+name: Claude Code
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  claude:
+    if: contains(github.event.comment.body, '@claude')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+```
+
+Result: **SDK execution error**. Claude would respond with "I'll analyze this and get back to you" and then crash.
+
+### Attempt 2: Add the Checkout Step
+
+Maybe it needs the repo checked out first?
+
+```yaml
+steps:
+  - uses: actions/checkout@v4
+    with:
+      fetch-depth: 1
+  - uses: anthropics/claude-code-action@v1
+```
+
+Result: **Same crash**. The logs showed minified JavaScript errors that were completely unhelpful.
+
+### Attempt 3: Add id-token Permission
+
+The error mentioned "OIDC token". Added the permission:
+
+```yaml
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+  issues: write
+```
+
+Result: **Still crashing**. But now with a different error!
+
+### Attempt 4: Check the Token Format
+
+I was using `sk-ant-oat01-...` (an OAuth token from `claude setup-token`). Tried a regular API key `sk-ant-api03-...` from the Anthropic console.
+
+Result: **Same crash**. The logs showed:
+
+```json
+{
+  "type": "result",
+  "is_error": true,
+  "total_cost_usd": 0
+}
+```
+
+Zero cost means the API call never even happened. The token was being rejected before Claude could think.
+
+### The Breakthrough: /install-github-app
+
+After an hour of this, I tried the official setup method:
+
+```bash
+claude
+/install-github-app
+```
+
+This walks you through:
+1. Installing the Claude GitHub App on your repos
+2. Authorizing OAuth properly
+3. Generating the right workflow files
+
+The key difference? It uses `claude_code_oauth_token` instead of `anthropic_api_key`, and sets up proper GitHub App authentication with OIDC tokens.
+
+The working workflow:
+
+```yaml
+name: Claude Code
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  claude:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      id-token: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+```
+
+First test: **Success!** Claude created a test file in 40 seconds.
+
+## The Payoff
+
+With the workflow working, I set up three repos and kicked off real implementations simultaneously:
+
+### 1. Chord-Scale Matrix Game (tools repo)
+
+A music theory game to memorize jazz harmony. The PRD specified:
+- Data model with 28 chord-scale entries
+- DegreeQuiz React component
+- Difficulty settings
+- Router integration
+
+**Result:** 3 minutes 46 seconds. Claude created the full data model, quiz component, game container, and wired up the route.
+
+### 2. PDF Text Extraction (knitting-app repo)
+
+Extract text from knitting pattern PDFs using pypdf. The PRD specified:
+- PDF processing module
+- Section parsing (Materials, Gauge, Instructions)
+- API endpoint integration
+
+**Result:** 2 minutes 57 seconds. Full implementation with extraction functions and API integration.
+
+### 3. Farm Stand Disco Backend (concierge repo)
+
+A backend API for a local farm stand discovery app. The PRD specified:
+- CRUD endpoints for farm stands
+- Nearby search with lat/lng
+- AWS CDK infrastructure template
+
+**Result:** 6 minutes 22 seconds. Complete API with Lambda handlers, DynamoDB models, and infrastructure as code.
+
+**Total time for three features:** ~13 minutes.
+
+## What Actually Happened
+
+Here's what the process looked like from Mr. Banana Head's perspective (my orchestrating AI):
+
+```
+Me: @claude Implement Phase 1 of the Chord-Scale Matrix Game...
+
+[3 minutes later]
+
+Claude: **Claude finished @jonathanhudak's task in 3m 46s**
+        Branch: claude/issue-29-20260202-0501
+        [Create PR →]
+```
+
+Claude creates a branch, commits the code, and provides a link to create a PR. The implementation includes:
+- Proper TypeScript types
+- React components matching existing patterns
+- Tailwind CSS styling consistent with the app
+- Working game logic
+
+Is it perfect? No. But it's a solid first draft that would have taken me hours to write. Now I review, iterate, and merge.
+
+## The Meta-Lesson
+
+What's wild about this setup is the recursion:
+
+1. I'm a human with ideas
+2. Mr. Banana Head (Claude) helps me write clear specs
+3. Claude Code Action (also Claude) implements the specs
+4. Mr. Banana Head reviews the output and provides feedback
+5. Claude Code iterates based on feedback
+
+It's like having a small engineering team where everyone is the same AI at different levels of context. The orchestrating Claude has deep knowledge of my projects, goals, and preferences. The implementing Claude has fresh context for each task but full access to the codebase.
+
+## Try It Yourself
+
+If you want to set this up:
+
+1. Install [Claude Code](https://claude.ai/code) CLI
+2. Run `/install-github-app` and follow the prompts
+3. Create an issue with a detailed task description
+4. Comment `@claude implement this` on the issue
+5. Wait 2-6 minutes
+6. Review the PR
+
+**Tips:**
+- Be specific in your PRDs. Claude works better with clear requirements.
+- Reference existing code patterns. "Follow the style in `src/components/`"
+- Start small. Test with a simple file creation before complex features.
+- Use the OAuth method, not raw API keys. Trust me on this one.
+
+## What's Next
+
+I've got three PRs to review tonight, a repo crawler agent scheduled for 2am that will audit all my GitHub repos, and a blog (this one!) that finally has new content.
+
+The Claude army is operational. Now I just need to point it at the right problems.
+
+---
+
+*The tools mentioned in this post:*
+- [OpenClaw](https://github.com/openclaw/openclaw) - AI orchestration platform
+- [Claude Code GitHub Action](https://github.com/anthropics/claude-code-action) - AI coding agent for GitHub
+- [My tools monorepo](https://github.com/jonathanhudak/tools) - Where the chord-scale game lives
