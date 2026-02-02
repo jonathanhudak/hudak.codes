@@ -1,0 +1,202 @@
+/**
+ * Prism.js Flexoki Light Theme
+ * Based on the Flexoki color palette: https://stephango.com/flexoki
+ *
+ * Colors:
+ * - Background: #FFFCF0 (paper)
+ * - Text: #1C1B1A (black)
+ * - Comments: #6F6E69 (tx-2)
+ * - Keywords: #AF3029 (red)
+ * - Strings: #66800B (green)
+ * - Numbers: #BC5215 (orange)
+ * - Functions: #205EA6 (blue)
+ * - Types: #5E409D (purple)
+ */
+
+@media (prefers-color-scheme: light) {
+  code[class*="language-"],
+  pre[class*="language-"] {
+    color: #1C1B1A;
+    background: none;
+    text-shadow: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 1em;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    tab-size: 4;
+    hyphens: none;
+  }
+
+  /* Code blocks */
+  pre[class*="language-"] {
+    padding: 1rem;
+    margin: 0.5em 0;
+    overflow: auto;
+    border-radius: 0.5rem;
+    background: #FFFCF0;
+  }
+
+  /* Inline code */
+  :not(pre) > code[class*="language-"] {
+    padding: 0.1em 0.3em;
+    border-radius: 0.3em;
+    white-space: normal;
+    background: #FFFCF0;
+  }
+
+  /* Scrollbar styling for code blocks */
+  pre[class*="language-"]::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  pre[class*="language-"]::-webkit-scrollbar-track {
+    background: #F2F0E5;
+    border-radius: 0.5rem;
+  }
+
+  pre[class*="language-"]::-webkit-scrollbar-thumb {
+    background: #E6E4D9;
+    border-radius: 0.5rem;
+  }
+
+  pre[class*="language-"]::-webkit-scrollbar-thumb:hover {
+    background: #DAD8CE;
+  }
+
+  /* Tokens */
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    color: #6F6E69;
+    font-style: italic;
+  }
+
+  .token.punctuation {
+    color: #1C1B1A;
+  }
+
+  .token.namespace {
+    opacity: 0.7;
+  }
+
+  .token.property,
+  .token.tag,
+  .token.boolean,
+  .token.constant,
+  .token.symbol,
+  .token.deleted {
+    color: #AF3029;
+  }
+
+  .token.selector,
+  .token.attr-name,
+  .token.string,
+  .token.char,
+  .token.builtin,
+  .token.inserted {
+    color: #66800B;
+  }
+
+  .token.number {
+    color: #BC5215;
+  }
+
+  .token.operator,
+  .token.entity,
+  .token.url,
+  .language-css .token.string,
+  .style .token.string {
+    color: #1C1B1A;
+  }
+
+  .token.atrule,
+  .token.attr-value,
+  .token.keyword {
+    color: #AF3029;
+  }
+
+  .token.function,
+  .token.class-name {
+    color: #205EA6;
+  }
+
+  .token.regex,
+  .token.important,
+  .token.variable {
+    color: #5E409D;
+  }
+
+  .token.important,
+  .token.bold {
+    font-weight: bold;
+  }
+
+  .token.italic {
+    font-style: italic;
+  }
+
+  .token.entity {
+    cursor: help;
+  }
+
+  /* Language-specific adjustments */
+  .language-typescript .token.keyword,
+  .language-javascript .token.keyword {
+    color: #AF3029;
+  }
+
+  .language-typescript .token.type-annotation,
+  .language-typescript .token.builtin,
+  .language-javascript .token.builtin {
+    color: #5E409D;
+  }
+
+  /* HTML/XML */
+  .language-markup .token.tag {
+    color: #AF3029;
+  }
+
+  .language-markup .token.attr-name {
+    color: #BC5215;
+  }
+
+  .language-markup .token.attr-value {
+    color: #66800B;
+  }
+
+  /* CSS */
+  .language-css .token.selector {
+    color: #AF3029;
+  }
+
+  .language-css .token.property {
+    color: #205EA6;
+  }
+
+  /* Bash/Shell */
+  .language-bash .token.function,
+  .language-shell .token.function {
+    color: #205EA6;
+  }
+
+  .language-bash .token.parameter,
+  .language-shell .token.parameter {
+    color: #1C1B1A;
+  }
+
+  /* YAML */
+  .language-yaml .token.key,
+  .language-yml .token.key {
+    color: #205EA6;
+  }
+
+  .language-yaml .token.string,
+  .language-yml .token.string {
+    color: #66800B;
+  }
+}
