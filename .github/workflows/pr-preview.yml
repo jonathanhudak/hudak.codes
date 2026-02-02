@@ -1,0 +1,113 @@
+name: PR Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Allow one concurrent deployment per PR
+concurrency:
+  group: pr-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build-preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Setup Deno environment
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Build site for preview
+        run: |
+          deno task build --location=https://jonathanhudak.github.io/hudak.codes/pr-preview/${{ github.event.pull_request.number }}/
+        env:
+          # Override base path for preview
+          LUME_BASE: /hudak.codes/pr-preview/${{ github.event.pull_request.number }}/
+
+      - name: Deploy PR Preview
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _site
+          destination_dir: pr-preview/${{ github.event.pull_request.number }}
+          # Don't add CNAME for previews
+          # Keep existing files (other PR previews)
+          keep_files: true
+
+      - name: Comment PR with preview link
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const previewUrl = `https://jonathanhudak.github.io/hudak.codes/pr-preview/${prNumber}/`;
+            
+            // Check if we already commented
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber
+            });
+            
+            const botComment = comments.data.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('🚀 **Preview deployed!**')
+            );
+            
+            const body = `🚀 **Preview deployed!**
+            
+            Preview URL: ${previewUrl}
+            
+            _This preview will be updated with each push to this PR._
+            
+            ---
+            <sub>🍌 Deployed by PR Preview workflow</sub>`;
+            
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: body
+              });
+            }
+
+  # Cleanup old previews when PR is closed
+  cleanup:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'closed'
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          
+      - name: Remove PR preview directory
+        run: |
+          if [ -d "pr-preview/${{ github.event.pull_request.number }}" ]; then
+            rm -rf "pr-preview/${{ github.event.pull_request.number }}"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Remove PR #${{ github.event.pull_request.number }} preview" || exit 0
+            git push
+          fi
