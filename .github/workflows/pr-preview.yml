@@ -31,7 +31,7 @@ jobs:
       - name: Fix URLs for preview
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
-          BASE_PATH="/hudak.codes/pr-preview/${PR_NUM}"
+          BASE_PATH="/pr-preview/${PR_NUM}"
           
           # Fix all href and src attributes that start with /
           find _site -name "*.html" -exec sed -i \
@@ -56,7 +56,7 @@ jobs:
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
-            const previewUrl = `https://jonathanhudak.github.io/hudak.codes/pr-preview/${prNumber}/`;
+            const previewUrl = `https://hudak.codes/pr-preview/${prNumber}/`;
             
             const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
