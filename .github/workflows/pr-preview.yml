@@ -38,6 +38,7 @@ jobs:
             -e "s|href=\"/\"|href=\"${BASE_PATH}/\"|g" \
             -e "s|href=\"/posts/|href=\"${BASE_PATH}/posts/|g" \
             -e "s|href=\"/style.css\"|href=\"${BASE_PATH}/style.css\"|g" \
+            -e "s|href=\"/css/|href=\"${BASE_PATH}/css/|g" \
             -e "s|src=\"/|src=\"${BASE_PATH}/|g" \
             {} \;
           
