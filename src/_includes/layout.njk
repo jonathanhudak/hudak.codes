@@ -4,11 +4,29 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ site.title }} - {{ title }}</title>
-   <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+  <title>{{ title }} - {{ site.title }}</title>
+  
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description or site.description }}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="{{ url | url(true) }}">
+  {% if image %}
+  <meta property="og:image" content="{{ image | url(true) }}">
+  {% endif %}
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" content="{{ description or site.description }}">
+  {% if image %}
+  <meta name="twitter:image" content="{{ image | url(true) }}">
+  {% endif %}
+  
+  <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
   <link rel="stylesheet" href="{{ '/css/prism-flexoki-dark.css' }}">
   <link rel="stylesheet" href="{{ '/css/prism-flexoki-light.css' }}">
-  <link  rel="stylesheet" href="{{ '/style.css' }}">
+  <link rel="stylesheet" href="{{ '/style.css' }}">
 </head>
 <body>
   <main>
@@ -19,7 +37,10 @@
 
       {% if title %}
         <h1>{{ title }}</h1>
-        <strong>{{ date | date }}</strong>
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+          <strong>{{ date | date }}</strong>
+          <button id="share-btn" style="padding: 0.25rem 0.75rem; cursor: pointer; border: 1px solid currentColor; background: none; font-size: 0.875rem;">Share</button>
+        </div>
       {% endif %}
 
       {{ content | safe }}
@@ -31,5 +52,24 @@
     <a href="https://twitter.com/hudak_jonathan">Twitter</a>
     <a href="https://www.linkedin.com/in/jonathan-hudak-084a529/">LinkedIn</a>
   </footer>
+  
+  <script>
+    const shareBtn = document.getElementById('share-btn');
+    if (shareBtn && navigator.share) {
+      shareBtn.addEventListener('click', async () => {
+        try {
+          await navigator.share({
+            title: document.title,
+            text: document.querySelector('meta[property="og:description"]')?.content || '',
+            url: window.location.href
+          });
+        } catch (err) {
+          if (err.name !== 'AbortError') console.error('Share failed:', err);
+        }
+      });
+    } else if (shareBtn) {
+      shareBtn.style.display = 'none';
+    }
+  </script>
 </body>
 </html>
