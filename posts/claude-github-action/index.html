@@ -3,8 +3,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>hudak.codes - Three Claudes Walk Into a GitHub Repo</title>
-   <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+  <title>Three Claudes Walk Into a GitHub Repo - hudak.codes</title>
+  
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:title" content="Three Claudes Walk Into a GitHub Repo">
+  <meta property="og:description" content="How I set up Claude Code GitHub Actions to turn issues into pull requests automatically">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hudak.codes/posts/claude-github-action/">
+  
+  <meta property="og:image" content="https://hudak.codes/posts/images/claude-flow-whiteboard.jpg">
+  
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Three Claudes Walk Into a GitHub Repo">
+  <meta name="twitter:description" content="How I set up Claude Code GitHub Actions to turn issues into pull requests automatically">
+  
+  <meta name="twitter:image" content="https://hudak.codes/posts/images/claude-flow-whiteboard.jpg">
+  
+  
+  <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
   <link rel="stylesheet" href="/css/prism-flexoki-dark.css">
   <link rel="stylesheet" href="/css/prism-flexoki-light.css">
   <link rel="stylesheet" href="/style.css">
@@ -18,7 +36,10 @@
 
       
         <h1>Three Claudes Walk Into a GitHub Repo</h1>
-        <strong>2026-02-02</strong>
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+          <strong>2026-02-02</strong>
+          <button id="share-btn" style="padding: 0.25rem 0.75rem; cursor: pointer; border: 1px solid currentColor; background: none; font-size: 0.875rem;">Share</button>
+        </div>
       
 
       <p>I set up an AI to manage other AIs that write code. Here's how to build your own Claude army.</p>
@@ -170,5 +191,24 @@ Users have requested a dark mode option. The app currently only supports light m
     <a href="https://twitter.com/hudak_jonathan">Twitter</a>
     <a href="https://www.linkedin.com/in/jonathan-hudak-084a529/">LinkedIn</a>
   </footer>
+  
+  <script>
+    const shareBtn = document.getElementById('share-btn');
+    if (shareBtn && navigator.share) {
+      shareBtn.addEventListener('click', async () => {
+        try {
+          await navigator.share({
+            title: document.title,
+            text: document.querySelector('meta[property="og:description"]')?.content || '',
+            url: window.location.href
+          });
+        } catch (err) {
+          if (err.name !== 'AbortError') console.error('Share failed:', err);
+        }
+      });
+    } else if (shareBtn) {
+      shareBtn.style.display = 'none';
+    }
+  </script>
 
 </body></html>

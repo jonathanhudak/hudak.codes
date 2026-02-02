@@ -3,8 +3,22 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>hudak.codes - Useful Git Tips</title>
-   <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+  <title>Useful Git Tips - hudak.codes</title>
+  
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:title" content="Useful Git Tips">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hudak.codes/posts/git/">
+  
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Useful Git Tips">
+  <meta name="twitter:description" content="">
+  
+  
+  <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
   <link rel="stylesheet" href="/css/prism-flexoki-dark.css">
   <link rel="stylesheet" href="/css/prism-flexoki-light.css">
   <link rel="stylesheet" href="/style.css">
@@ -18,7 +32,10 @@
 
       
         <h1>Useful Git Tips</h1>
-        <strong>2023-01-01</strong>
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+          <strong>2023-01-01</strong>
+          <button id="share-btn" style="padding: 0.25rem 0.75rem; cursor: pointer; border: 1px solid currentColor; background: none; font-size: 0.875rem;">Share</button>
+        </div>
       
 
       <p>A collection of useful git commands to simplify life:</p>
@@ -45,5 +62,24 @@ git log -p -- src/path/to/file.js # diff
     <a href="https://twitter.com/hudak_jonathan">Twitter</a>
     <a href="https://www.linkedin.com/in/jonathan-hudak-084a529/">LinkedIn</a>
   </footer>
+  
+  <script>
+    const shareBtn = document.getElementById('share-btn');
+    if (shareBtn && navigator.share) {
+      shareBtn.addEventListener('click', async () => {
+        try {
+          await navigator.share({
+            title: document.title,
+            text: document.querySelector('meta[property="og:description"]')?.content || '',
+            url: window.location.href
+          });
+        } catch (err) {
+          if (err.name !== 'AbortError') console.error('Share failed:', err);
+        }
+      });
+    } else if (shareBtn) {
+      shareBtn.style.display = 'none';
+    }
+  </script>
 
 </body></html>

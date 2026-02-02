@@ -3,8 +3,22 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>hudak.codes - Hotwire Turbo</title>
-   <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+  <title>Hotwire Turbo - hudak.codes</title>
+  
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:title" content="Hotwire Turbo">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hudak.codes/posts/hotwire-turbo/">
+  
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hotwire Turbo">
+  <meta name="twitter:description" content="">
+  
+  
+  <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
   <link rel="stylesheet" href="/css/prism-flexoki-dark.css">
   <link rel="stylesheet" href="/css/prism-flexoki-light.css">
   <link rel="stylesheet" href="/style.css">
@@ -18,7 +32,10 @@
 
       
         <h1>Hotwire Turbo</h1>
-        <strong>2022-06-03</strong>
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+          <strong>2022-06-03</strong>
+          <button id="share-btn" style="padding: 0.25rem 0.75rem; cursor: pointer; border: 1px solid currentColor; background: none; font-size: 0.875rem;">Share</button>
+        </div>
       
 
       <p>The boundaries between server and client-side rendering on the web have been a hot topic lately. I was reading a <a href="https://css-tricks.com/components-server-side-vs-client-side/">css-tricks article</a> about server-side versus client-side component and re-discovered Turbo build by the Basecamp &amp; Hey team.</p>
@@ -35,5 +52,24 @@ This is yet another instance of a return to web foundations</p>
     <a href="https://twitter.com/hudak_jonathan">Twitter</a>
     <a href="https://www.linkedin.com/in/jonathan-hudak-084a529/">LinkedIn</a>
   </footer>
+  
+  <script>
+    const shareBtn = document.getElementById('share-btn');
+    if (shareBtn && navigator.share) {
+      shareBtn.addEventListener('click', async () => {
+        try {
+          await navigator.share({
+            title: document.title,
+            text: document.querySelector('meta[property="og:description"]')?.content || '',
+            url: window.location.href
+          });
+        } catch (err) {
+          if (err.name !== 'AbortError') console.error('Share failed:', err);
+        }
+      });
+    } else if (shareBtn) {
+      shareBtn.style.display = 'none';
+    }
+  </script>
 
 </body></html>
