@@ -25,20 +25,23 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Configure for preview
+      - name: Build site
+        run: deno task build
+
+      - name: Fix URLs for preview
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
-          PREVIEW_URL="https://jonathanhudak.github.io/hudak.codes/pr-preview/${PR_NUM}/"
+          BASE_PATH="/hudak.codes/pr-preview/${PR_NUM}"
           
-          # Update the location in _config.ts
-          sed -i "s|http://localhost:3000|${PREVIEW_URL}|g" _config.ts
+          # Fix all href and src attributes that start with /
+          find _site -name "*.html" -exec sed -i \
+            -e "s|href=\"/\"|href=\"${BASE_PATH}/\"|g" \
+            -e "s|href=\"/posts/|href=\"${BASE_PATH}/posts/|g" \
+            -e "s|href=\"/style.css\"|href=\"${BASE_PATH}/style.css\"|g" \
+            -e "s|src=\"/|src=\"${BASE_PATH}/|g" \
+            {} \;
           
-          echo "Updated location in _config.ts"
-          grep "location" _config.ts
-
-      - name: Build site for preview
-        run: |
-          echo "import 'lume/cli.ts'" | deno run --unstable -A - --config=_config.preview.ts
+          echo "Fixed URLs with base path: ${BASE_PATH}"
 
       - name: Deploy PR Preview
         uses: peaceiris/actions-gh-pages@v4
