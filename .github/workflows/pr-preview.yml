@@ -27,82 +27,20 @@ jobs:
 
       - name: Configure for preview
         run: |
-          # Add base_path plugin to config
-          cat > _config.ts << 'CONFIGEOF'
-          import lume from "lume/mod.ts";
-          import jsx from "lume/plugins/jsx_preact.ts";
-          import mdx from "lume/plugins/mdx.ts";
-          import lightningCss from "lume/plugins/lightningcss.ts";
-          import prism from "lume/plugins/prism.ts";
-          import date from "lume/plugins/date.ts";
-          import basePath from "lume/plugins/base_path.ts";
-          import "npm:prismjs@1.29.0/components/prism-bash.js";
-          import "npm:prismjs@1.29.0/components/prism-typescript.js";
-          import modifyUrls from "lume/plugins/modify_urls.ts";
-          import StackBlitzEmbed from "./src/_components/StackBlitzEmbed.tsx";
-          import GithubEmbed from "./src/_components/GithubEmbed.tsx";
-
-          const site = lume({
-            src: "./src",
-            location: new URL("https://jonathanhudak.github.io/hudak.codes/pr-preview/${{ github.event.pull_request.number }}/"),
-          });
-
-          site.use(basePath());
-          site.use(jsx());
-          site.use(date());
-          site.use(
-            mdx({
-              components: {
-                IframeEmbed: StackBlitzEmbed,
-                StackBlitzEmbed,
-                GithubEmbed,
-              },
-            })
-          );
-          site.use(
-            prism({
-              extensions: [".md", ".mdx"],
-            })
-          );
-
-          site.preprocess([".mdx"], async (page) => {
-            const content = page?.data?.content?.toString();
-            const regex = /\[GithubEmbed\s+url="([^"]+)"\]/;
-
-            if (content) {
-              const urlMatch = content.match(regex);
-              const githubEmbedUrl = urlMatch ? urlMatch[1] : "";
-
-              if (urlMatch) {
-                const { scriptId, url } = await (
-                  await fetch("https://jonathanhudak-github-embed.deno.dev/embed-id", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      githubUrl: githubEmbedUrl,
-                    }),
-                  })
-                ).json();
-                const htmlString = \`
-          <div class="box">
-          <div id="ghe-\${scriptId}"></div>
-          <script type="module" src="https://jonathanhudak-github-embed.deno.dev/embed-script/\${scriptId}"></script>
-          <footer>
-          <a href="\${url}">\${url}</a>
-          </footer>
-          </div>\`;
-                const output = content.replace(regex, htmlString);
-                page.data.content = output;
-              }
-            }
-          });
-          site.use(lightningCss());
-          site.use(modifyUrls());
-
-          export default site;
-          CONFIGEOF
+          PR_NUM=${{ github.event.pull_request.number }}
+          PREVIEW_URL="https://jonathanhudak.github.io/hudak.codes/pr-preview/${PR_NUM}/"
+          
+          # Add base_path import and plugin
+          sed -i '1a import basePath from "lume/plugins/base_path.ts";' _config.ts
+          
+          # Update location URL
+          sed -i "s|const location = new URL(\"http://localhost:3000\");|const location = new URL(\"${PREVIEW_URL}\");|" _config.ts
+          
+          # Add base_path plugin after lume() call
+          sed -i '/const site = lume({/,/});/a site.use(basePath());' _config.ts
+          
+          echo "Updated _config.ts:"
+          head -30 _config.ts
 
       - name: Build site for preview
         run: deno task build
@@ -158,7 +96,7 @@ jobs:
       contents: write
       
     steps:
-      - name: Checkout gh-pages branch
+      - name: Checkout gh-pages
         uses: actions/checkout@v4
         with:
           ref: gh-pages
