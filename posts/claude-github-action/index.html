@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hudak.codes - Three Claudes Walk Into a GitHub Repo</title>
+   <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+  <link rel="stylesheet" href="/css/prism-flexoki-dark.css">
+  <link rel="stylesheet" href="/css/prism-flexoki-light.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <article>
+      <header>
+        <a href="/">hudak.codes</a>
+      </header>
+
+      
+        <h1>Three Claudes Walk Into a GitHub Repo</h1>
+        <strong>2026-02-02</strong>
+      
+
+      <p>I set up an AI to manage other AIs that write code. Here's how to build your own Claude army.</p>
+<h2>The Problem</h2>
+<p>Too many project ideas, not enough time. I'm good at writing detailed requirements, but slow at implementation. The mental context-switching between "architect mode" and "implementation mode" kills momentum.</p>
+<p>What if AI could do the boring parts while I focus on what matters — defining <em>what</em> to build and <em>why</em>?</p>
+<h2>The Solution: Claude Code GitHub Actions</h2>
+<p>Anthropic recently released <a href="https://docs.anthropic.com/claude-code">Claude Code</a>, a CLI tool that lets Claude write code in your repositories. Combined with GitHub Actions, you get something powerful: <strong>write an issue, get a pull request</strong>.</p>
+<p>The workflow looks like this:</p>
+<ol>
+<li><strong>You</strong> write a detailed issue (feature request, bug report, or PRD)</li>
+<li><strong>GitHub Action</strong> triggers when you @mention Claude</li>
+<li><strong>Claude Code</strong> reads the issue, writes the code, runs tests</li>
+<li><strong>Pull Request</strong> is created automatically</li>
+<li><strong>You</strong> (or another AI) review and merge</li>
+</ol>
+<h2>Setting It Up</h2>
+<h3>Step 1: Install the GitHub App</h3>
+<p>Run this in your terminal:</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash">claude /install-github-app
+</code></pre>
+<p>This opens a browser to authorize the Claude Code GitHub App. Select the repositories you want to enable.</p>
+<h3>Step 2: Add the Workflow File</h3>
+<p>Create <code>.github/workflows/claude.yml</code>:</p>
+<pre class="language-yaml" tabindex="0"><code class="language-yaml">name: Claude Code
+
+on:
+  issue_comment:
+    types: [created]
+  issues:
+    types: [opened, edited]
+
+jobs:
+  claude:
+    if: contains(github.event.comment.body, '@claude') || contains(github.event.issue.body, '@claude')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        uses: anthropics/claude-code-action@beta
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+</code></pre>
+<h3>Step 3: Add Your API Key</h3>
+<p>Go to your repo's Settings → Secrets → Actions, and add:</p>
+<ul>
+<li><code>ANTHROPIC_API_KEY</code>: Your Claude API key from <a href="https://console.anthropic.com">console.anthropic.com</a></li>
+</ul>
+<h3>Step 4: Write an Issue</h3>
+<p>Here's an example issue that works well:</p>
+<pre class="language-markdown" tabindex="0"><code class="language-markdown">## Feature: Add Dark Mode Toggle
+
+### Context
+Users have requested a dark mode option. The app currently only supports light mode.
+
+### Requirements
+- Add a toggle button in the header
+- Persist preference in localStorage
+- Use CSS custom properties for theme colors
+- Default to system preference
+
+### Technical Notes
+- Use the existing Button component
+- Theme colors should be defined in `src/styles/theme.css`
+
+@claude please implement this feature
+</code></pre>
+<h2>What I Learned</h2>
+<h3>Be Specific in Your Issues</h3>
+<p>The quality of Claude's output directly correlates with the quality of your input. Vague issues get vague code. Detailed PRDs get production-ready implementations.</p>
+<p>Include:</p>
+<ul>
+<li><strong>Context</strong>: Why does this feature exist?</li>
+<li><strong>Requirements</strong>: What specifically needs to happen?</li>
+<li><strong>Technical notes</strong>: Any constraints or existing patterns to follow?</li>
+<li><strong>Acceptance criteria</strong>: How do we know it's done?</li>
+</ul>
+<h3>The OAuth vs API Key Gotcha</h3>
+<p>I spent an hour debugging "unauthorized" errors before realizing the difference:</p>
+<ul>
+<li><strong>GitHub App OAuth</strong> (via <code>/install-github-app</code>): Lets Claude access your repos</li>
+<li><strong>Anthropic API Key</strong> (in secrets): Lets the Action call Claude's API</li>
+</ul>
+<p>You need both. The error messages don't make this obvious.</p>
+<h3>Claude Reads Your Entire Repo</h3>
+<p>Before writing code, Claude analyzes your existing codebase. It picks up on:</p>
+<ul>
+<li>Coding style and conventions</li>
+<li>Existing patterns and abstractions</li>
+<li>Project structure</li>
+<li>Dependencies</li>
+</ul>
+<p>This means the generated code usually matches your style. It's not just plopping in generic solutions.</p>
+<h3>Review Still Matters</h3>
+<p>Claude is good, not perfect. I've seen it:</p>
+<ul>
+<li>Miss edge cases the issue didn't mention</li>
+<li>Over-engineer simple features</li>
+<li>Use deprecated APIs (its training has a cutoff date)</li>
+</ul>
+<p>Treat Claude's PRs like PRs from a junior developer who codes fast but needs review.</p>
+<h2>The Three Claudes Pattern</h2>
+<p>Here's where it gets interesting. I run three Claude instances:</p>
+<ol>
+<li><strong>Claude Code Action</strong>: Writes code from issues</li>
+<li><strong>Claude in my terminal</strong>: For local development and debugging</li>
+<li><strong>Claude as an assistant</strong>: Reviews PRs, manages projects, monitors activity</li>
+</ol>
+<p>They coordinate through GitHub. The assistant @mentions the Action, reviews its PRs, and handles the project management layer. It's Claudes all the way down.</p>
+<h2>Real Results</h2>
+<p>After setting this up across three of my repos, here's what happened in one night:</p>
+<table><thead><tr><th>Project</th><th>Feature</th><th>Time to PR</th><th>Lines of Code</th></tr></thead><tbody><tr><td>Music app</td><td>Chord quiz game</td><td>3m 46s</td><td>733</td></tr><tr><td>Utility app</td><td>PDF text extraction</td><td>2m 57s</td><td>432</td></tr><tr><td>Side project</td><td>Backend API</td><td>6m 22s</td><td>1,159</td></tr></tbody></table>
+<p>That's 2,300+ lines of code from three detailed issues, ready for review in under 15 minutes of wall clock time.</p>
+<h2>Should You Do This?</h2>
+<p><strong>Yes, if:</strong></p>
+<ul>
+<li>You're good at writing requirements but context-switching to implementation is costly</li>
+<li>You have many small features/bugs that don't justify deep focus time</li>
+<li>You want to prototype ideas quickly before investing manually</li>
+</ul>
+<p><strong>Not yet, if:</strong></p>
+<ul>
+<li>Your codebase has no conventions (Claude will make inconsistent choices)</li>
+<li>You need highly-specific domain knowledge (Claude knows general patterns, not your business logic)</li>
+<li>Security is paramount (review AI-generated code carefully before merging)</li>
+</ul>
+<h2>The Bigger Picture</h2>
+<p>This isn't about replacing developers. It's about changing what developers do.</p>
+<p>Instead of: <em>"I'll spend 2 hours implementing this feature"</em></p>
+<p>It becomes: <em>"I'll spend 20 minutes writing a detailed spec, let Claude implement it, then spend 15 minutes reviewing and adjusting."</em></p>
+<p>The skill shifts from "writing code" to "writing specifications" and "reviewing code." Those are different muscles.</p>
+<p>For me, this means more time thinking about what to build and less time on the mechanics of building it. Your mileage may vary.</p>
+<hr>
+<p><em>Interested in this setup? The workflow file above is everything you need to get started. And yes, an AI helped write this blog post. We're in the future now.</em></p>
+    </article>
+  </main>
+  <footer class="footer">
+    <a href="https://jonathanhudak.com">Jonathan Hudak © 2023</a>
+    <a href="https://github.com/jonathanhudak">Github</a>
+    <a href="https://twitter.com/hudak_jonathan">Twitter</a>
+    <a href="https://www.linkedin.com/in/jonathan-hudak-084a529/">LinkedIn</a>
+  </footer>
+
+</body></html>
