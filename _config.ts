@@ -73,4 +73,7 @@ site.preprocess([".mdx"], async (page) => {
 site.use(lightningCss());
 site.use(modifyUrls());
 
+// Copy static assets
+site.copy("posts/images");
+
 export default site;
