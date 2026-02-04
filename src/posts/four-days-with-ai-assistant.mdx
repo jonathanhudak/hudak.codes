@@ -1,0 +1,155 @@
+---
+title: "What 4 Days with a Bespoke AI Assistant Taught Me About Digital Hygiene"
+date: 2026-02-03
+published: true
+templateEngine: mdx
+description: "I gave an AI agent full access to my digital life. 89 repos archived, 17GB of email deleted, and a system that finally works."
+tags: [ai, productivity, automation, openclaw, digital-hygiene]
+image: /posts/images/day4-whiteboard.png
+---
+
+I gave an AI agent full access to my digital life. Here's what happened.
+
+## The Setup
+
+On January 31st, I named an AI assistant "Mr. Banana Head" — because if you're going to give software access to your GitHub, email, calendar, and notes, you might as well not take yourself too seriously.
+
+The stack:
+- **OpenClaw** — AI agent orchestration running locally on my Mac
+- **Discord** — my interface (phone notifications, async conversations)
+- **Access** — GitHub, iCloud, Obsidian vault, Apple Reminders, Gmail
+
+The goal: stop being a digital hoarder.
+
+## The Purge: 99 → 10 Repos
+
+I had 99 public GitHub repositories. Most were abandoned experiments, half-finished tutorials, framework explorations that taught me something and then... sat there. Guilt in repo form.
+
+In one session, the AI:
+1. Audited all 147 repos (public + private)
+2. Categorized them: active, meaningful, has-stars, archive-candidate
+3. Archived 89 repos with a single batch command
+
+What remains: **10 repositories that actually matter.**
+
+```
+tools              — main monorepo
+hudak.codes        — this blog
+jonathanhudak.com  — personal site
+theodore-learns-code — for my son
+tunr               — web instrument tuner
+make-music         — music tools
+doris-and-waffle-games — games I made with my kid
+visualize-audio    — audio visualization
+audio.hudak.land   — audio project
+```
+
+**The lesson:** If you wouldn't start it today, archive it. It's not deleted — it's just not cluttering your profile anymore.
+
+## Gmail: 17GB → Less Than 1GB
+
+Years of "I might need this email" had ballooned my Gmail to 17GB. The AI batch-deleted thousands of unstarred emails, keeping only what I'd explicitly marked as important.
+
+One command. 16GB of digital weight — gone.
+
+## Inbox Zero, Finally
+
+My Obsidian vault had 464 files rotting in an inbox folder. Notes I'd captured but never processed. The AI went through every single one:
+
+- Created 17 "Bases" (database views for queries)
+- Built 7 Maps of Content (MOCs)
+- Archived or properly filed everything
+
+The inbox is now actually empty. Not "I'll get to it empty." Actually empty.
+
+## 137 Reminders → A System That Works
+
+Apple Reminders had become a graveyard of good intentions. 137 incomplete items, some dating back months.
+
+The AI:
+- Categorized each reminder (actionable / someday-maybe / archive)
+- Scheduled vacation content for my Arizona trip
+- Created a triage document with priorities
+- Set up recurring check-ins
+
+The difference: a structured system instead of a guilt list.
+
+## Security First
+
+If you're giving AI access to your digital life, you better lock it down first. The AI installed:
+
+- **prompt-guard** — 349 attack pattern detection for group chats
+- **dont-hack-me** — security audit for the config
+- **Security audit result:** 6/7 PASS, 1 expected warning
+
+## Bespoke Systems > Generic Apps
+
+The most interesting part wasn't the cleanup — it was the custom systems we built:
+
+### Interview System
+I realized my notes don't capture my full depth. Christianity, psychedelics, music practice — entire dimensions unmapped. So we built an interview system:
+
+- 10 categories of questions (spiritual journey, formative experiences, values...)
+- 3 questions per day via cron job (9am, 2pm, 8pm)
+- Living document I can edit anytime
+- Answers get synthesized into my knowledge base
+
+No app does this. It exists because I needed it.
+
+### Daily Summary
+Every night at 11:59pm, a cron job captures what we accomplished that day. Automatic journaling of actual work, not aspirational todos.
+
+### Gap Scanner CLI
+A custom pre-market stock screening tool for my specific trading strategy (Gap & Go). Polygon API integration, free tier, exactly what I need and nothing I don't.
+
+### Puzzle Games for My Son
+Theodore (9) has a Daylight Computer with an e-ink display. He needed games. In one day:
+
+- Sokoban (10 levels)
+- Word Search (5 themes, 3 difficulties)
+- Nonogram (15 puzzles)
+- PWA support for offline play
+- Touch-optimized, black & white for e-ink
+
+Deployed at [jonathanhudak.github.io/tools/puzzle-games/](https://jonathanhudak.github.io/tools/puzzle-games/)
+
+## The Numbers
+
+**4 days. Here's what got done:**
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Public repos | 99 | 10 |
+| Gmail storage | 17GB | <1GB |
+| Obsidian inbox | 464 files | 0 |
+| Incomplete reminders | 137 | Triaged |
+| Blog posts published | 0 in years | 2 |
+| PRs merged | — | 25+ |
+| Custom tools built | — | 4 |
+| Skills installed | — | 17 |
+
+## What I Actually Learned
+
+**Digital clutter is emotional debt.** Every abandoned repo, unread email, and stale reminder carries cognitive weight. You don't notice it until it's gone.
+
+**"Someday maybe" is usually "never."** Archive it. The good ideas will come back.
+
+**Security and cleanup are prerequisites.** Do them first, not after you've already exposed yourself.
+
+**Bespoke > generic when you can build.** Generic productivity apps optimize for everyone. Custom systems optimize for you.
+
+**The assistant works best when you know what you want.** I didn't ask "make me productive." I said "archive these repos" and "build puzzle games for my kid." Specific requests, specific results.
+
+## What's Next
+
+The cleanup is done. Now the interesting part: using this system to actually build things.
+
+- **Farm Stand Disco** — local farm stand discovery for my island
+- **Knitting App** — made-to-measure pattern management
+- **Gap Scanner** — expanding the trading tools
+
+The difference: I'm not carrying 99 repos of guilt anymore. Just 10 repos of intention.
+
+---
+
+*Mr. Banana Head is powered by OpenClaw. The name was chosen specifically because taking yourself too seriously is the enemy of getting things done.*
